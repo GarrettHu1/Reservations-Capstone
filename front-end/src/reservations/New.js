@@ -1,5 +1,5 @@
-import React from "react";
-import Routes from "./Routes";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 // route: /reservations/new
 
@@ -12,6 +12,14 @@ import Routes from "./Routes";
 // Number of people in the party, which must be at least 1 person. 
 // `<input name="people" />`
 
+
+
+export default function New() {
+
+const [ formData, setFormData ] = useState({ ...initialFormState });
+
+const history = useHistory();
+
 const initialFormState = {
     first_name: "",
     last_name: "",
@@ -20,44 +28,61 @@ const initialFormState = {
     reservation_time: "",
     people: "",
 
-}
+};
+
+const handleChange = ({ target }) => {
+    setFormData({
+      ...formData,
+      [target.name]: target.value,
+    });
+  };
 
 const handleSubmit = async (event) => {
     event.preventDefault();
-    if (card.front.trim() ==="" || card.back.trim() ===""){window.alert('Please enter all fields')}
-    else {await createCard(deckId, card);history.push(`/decks/${deck.id}`);}
+    let a = formData.name.trim();
+    let b = formData.last_name.trim();
+    let c = formData.mobile_number.trim();
+    let d = formData.reservation_date.trim();
+    let e = formData.reservation_time.trim();
+    let f = formData.people.trim();
+
+    // if one of inputs are empty show alert
+    if ( a === "" || b === "" || c === "" || d === "" || e === "" ||f === "" ){window.alert('Invalid Input')}
+    else if (d === "tuesday") {}
+    else {await createReservation(formData);history.push(`/reservations`);}
+    // reset form state
+    setFormData(initialFormState);
   };
 
-function New() {
     return (
-<form>
-  <label>
-    First Name:
-    <input type="text" name="first_name" onChange={this.handleChange} />
-  </label>
-  <label>
-    Last Name:
-    <input type="text" name="last_name" onChange={this.handleChange} />
-  </label>
-  <label>
-    Mobile Number:
-    <input type="text" name="mobile_number" onChange={this.handleChange} />
-  </label>
-  <label>
-  Date of reservation:
-    <input type="text" name="reservation_date" onChange={this.handleChange} />
-  </label>
-  <label>
-  Time of reservation:
-    <input type="text" name="reservation_time" onChange={this.handleChange} />
-  </label>
-  <label>
-  Number of people in the party:
-    <input type="text" name="people" onChange={this.handleChange} />
-  </label>
-  <input type="submit" value="Submit" />
-</form>
+        <main>
+            <form>
+            <label>
+                First Name:
+                <input type="text" name="first_name" onChange={handleChange} />
+            </label>
+            <label>
+                Last Name:
+                <input type="text" name="last_name" onChange={handleChange} />
+            </label>
+            <label>
+                Mobile Number:
+                <input type="text" name="mobile_number" onChange={handleChange} />
+            </label>
+            <label>
+                Date of reservation:
+                <input type="date" name="reservation_date" onChange={handleChange} />
+            </label>
+            <label>
+                Time of reservation:
+                <input type="text" name="reservation_time" onChange={handleChange} />
+            </label>
+            <label>
+                Number of people in the party:
+                <input type="text" name="people" onChange={handleChange} />
+            </label>
+            <input type="submit" value="Submit" />
+            </form>
+        </main>
     )
-}
-
-export default New
+};
