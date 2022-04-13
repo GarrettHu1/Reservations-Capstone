@@ -16,10 +16,6 @@ import { useHistory } from "react-router-dom";
 
 export default function NewRes() {
 
-const [ formData, setFormData ] = useState({ ...initialFormState });
-
-const history = useHistory();
-
 const initialFormState = {
     first_name: "",
     last_name: "",
@@ -30,6 +26,12 @@ const initialFormState = {
 
 };
 
+const [ formData, setFormData ] = useState({ ...initialFormState });
+
+const history = useHistory();
+
+
+
 const handleChange = ({ target }) => {
     setFormData({
       ...formData,
@@ -39,25 +41,36 @@ const handleChange = ({ target }) => {
 
 const handleSubmit = async (event) => {
     event.preventDefault();
-    let a = formData.name.trim();
-    let b = formData.last_name.trim();
-    let c = formData.mobile_number.trim();
-    let d = formData.reservation_date.trim();
-    let e = formData.reservation_time.trim();
-    let f = formData.people.trim();
+    let a = formData.name;
+    let b = formData.last_name;
+    let c = formData.mobile_number;
+    let d = formData.reservation_date;
+    let e = formData.reservation_time;
+    let f = formData.people;
 
     // if one of inputs are empty show alert
-    if ( a === "" || b === "" || c === "" || d === "" || e === "" ||f === "" ){window.alert('Invalid Input')}
-    else if (d === "tuesday") {}
-    else {await createReservation(formData);history.push(`/reservations`);}
+    if (d) console.log(d)
+    if (e) console.log(e)
+    // if (e < 1030){window.alert('Please choose a time during opening hours')}
+    if ( a === "" || b === "" || c === "" || d === "" || f < 1){window.alert('Invalid Input')}
+    else if (d === "tuesday") {window.alert("Please choose a time during opening days")}
+    else {history.push(`/reservations`);}
+    // await createReservation(formData);
     // reset form state
     setFormData(initialFormState);
+    history.go("/")
+  };
+
+  const handleCancel = (event) => {
+    event.preventDefault();
+    history.push(-1);
   };
 
 
     return (
         <main>
-        <form>
+            <p>Hello</p>
+            <form>
         <label>
             First Name:
             <input type="text" name="first_name" onChange={handleChange} />
@@ -76,14 +89,14 @@ const handleSubmit = async (event) => {
         </label>
         <label>
             Time of reservation:
-            <input type="text" name="reservation_time" onChange={handleChange} />
+            <input type="time" name="reservation_time" onChange={handleChange} />
         </label>
         <label>
             Number of people in the party:
             <input type="text" name="people" onChange={handleChange} />
         </label>
-        <input type="submit" value="Submit" />
-        <input type="cancel" value="Cancel" />
+        <button onClick={handleSubmit} className="btn btn-primary">Submit</button>
+        <button onClick={handleCancel} className="btn btn-danger">Cancel</button>
         </form>
         </main> 
     )
