@@ -14,7 +14,7 @@ import { useHistory } from "react-router-dom";
 
 
 
-export default function New() {
+export default function NewRes() {
 
 const [ formData, setFormData ] = useState({ ...initialFormState });
 
@@ -54,35 +54,37 @@ const handleSubmit = async (event) => {
     setFormData(initialFormState);
   };
 
+
     return (
         <main>
-            <form>
-            <label>
-                First Name:
-                <input type="text" name="first_name" onChange={handleChange} />
-            </label>
-            <label>
-                Last Name:
-                <input type="text" name="last_name" onChange={handleChange} />
-            </label>
-            <label>
-                Mobile Number:
-                <input type="text" name="mobile_number" onChange={handleChange} />
-            </label>
-            <label>
-                Date of reservation:
-                <input type="date" name="reservation_date" onChange={handleChange} />
-            </label>
-            <label>
-                Time of reservation:
-                <input type="text" name="reservation_time" onChange={handleChange} />
-            </label>
-            <label>
-                Number of people in the party:
-                <input type="text" name="people" onChange={handleChange} />
-            </label>
-            <input type="submit" value="Submit" />
-            </form>
-        </main>
+        <form>
+        <label>
+            First Name:
+            <input type="text" name="first_name" onChange={handleChange} />
+        </label>
+        <label>
+            Last Name:
+            <input type="text" name="last_name" onChange={handleChange} />
+        </label>
+        <label>
+            Mobile Number:
+            <input type="text" name="mobile_number" onChange={handleChange} />
+        </label>
+        <label>
+            Date of reservation:
+            <input type="date" name="reservation_date" onChange={handleChange} />
+        </label>
+        <label>
+            Time of reservation:
+            <input type="text" name="reservation_time" onChange={handleChange} />
+        </label>
+        <label>
+            Number of people in the party:
+            <input type="text" name="people" onChange={handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+        <input type="cancel" value="Cancel" />
+        </form>
+        </main> 
     )
 };
