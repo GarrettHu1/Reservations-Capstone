@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+
 // route: /reservations/new
 
 // Form containing follow fields:
@@ -49,13 +50,14 @@ const handleSubmit = async (event) => {
     let f = formData.people;
 
     // if one of inputs are empty show alert
-    if (d) console.log(d)
-    if (e) console.log(e)
     // if (e < 1030){window.alert('Please choose a time during opening hours')}
-    if ( a === "" || b === "" || c === "" || d === "" || f < 1){window.alert('Invalid Input')}
+    if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){window.alert('Invalid Input')}
     else if (d === "tuesday") {window.alert("Please choose a time during opening days")}
-    else {history.push(`/reservations`);}
-    // await createReservation(formData);
+    else {
+    //   await createReservation(formData);
+        history.push(`/reservations`);
+    }
+    
     // reset form state
     setFormData(initialFormState);
     history.go("/");
