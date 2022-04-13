@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
 
 // route: /reservations/new
 
@@ -39,6 +39,7 @@ const handleChange = ({ target }) => {
       [target.name]: target.value,
     });
   };
+  
 
 const handleSubmit = async (event) => {
     event.preventDefault();
@@ -49,11 +50,21 @@ const handleSubmit = async (event) => {
     let e = formData.reservation_time;
     let f = formData.people;
 
+
     // if one of inputs are empty show alert
     // if (e < 1030){window.alert('Please choose a time during opening hours')}
     if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){window.alert('Invalid Input')}
     else if (d === "tuesday") {window.alert("Please choose a time during opening days")}
     else {
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        };
+        fetch(`${API_BASE_URL}`, requestOptions)
+            .then(response => response.json())
+            .then(data => this.setState({ postId: data.id }));
+
     //   await createReservation(formData);
         history.push(`/reservations`);
     }
@@ -67,6 +78,8 @@ const handleSubmit = async (event) => {
     event.preventDefault();
     history.goBack();
   };
+
+  
 
 
     return (

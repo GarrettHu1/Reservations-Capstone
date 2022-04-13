@@ -15,9 +15,7 @@ async function list(req, res) {
   console.log(data)
   // const dataForDate = data.filter((data) => data.reservations_date === day)
 
-  res.json({
-    data: [],
-  });
+  res.json({data: data});
 }
 
 const VALID_PROPERTIES = [

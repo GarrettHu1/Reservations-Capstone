@@ -28,6 +28,19 @@ function Dashboard({ date }) {
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
+        <div class="btn-group" role="group" aria-label="navigation buttons">
+          <a class="btn btn-secondary" href="/dashboard?date=2022-04-12">
+            <span class="oi oi-chevron-left"></span>
+            &nbsp;Previous
+            </a>
+            <a class="btn btn-secondary" href="/dashboard?date=2022-04-13">
+              Today
+              </a>
+              <a class="btn btn-secondary" href="/dashboard?date=2022-04-14">
+                Next&nbsp;<
+                  span class="oi oi-chevron-right"></span>
+                  </a>
+                  </div>
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
