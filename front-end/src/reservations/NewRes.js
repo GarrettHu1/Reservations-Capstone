@@ -58,12 +58,12 @@ const handleSubmit = async (event) => {
     // await createReservation(formData);
     // reset form state
     setFormData(initialFormState);
-    history.go("/")
+    history.go("/");
   };
 
   const handleCancel = (event) => {
     event.preventDefault();
-    history.push(-1);
+    history.goBack();
   };
 
 
@@ -95,7 +95,7 @@ const handleSubmit = async (event) => {
             Number of people in the party:
             <input type="text" name="people" onChange={handleChange} />
         </label>
-        <button onClick={handleSubmit} className="btn btn-primary">Submit</button>
+        <button type="submit" onClick={handleSubmit} className="btn btn-primary">Submit</button>
         <button onClick={handleCancel} className="btn btn-danger">Cancel</button>
         </form>
         </main> 
