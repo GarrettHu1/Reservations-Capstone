@@ -31,8 +31,6 @@ const [ formData, setFormData ] = useState({ ...initialFormState });
 
 const history = useHistory();
 
-
-
 const handleChange = ({ target }) => {
     setFormData({
       ...formData,

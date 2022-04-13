@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { previous, today, next } from "../utils/date-time"
 
 /**
  * Defines the dashboard page.
@@ -11,7 +12,10 @@ import ErrorAlert from "../layout/ErrorAlert";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [ currentDay, setCurrentDay ] = useState(date)
+  const [ newDate, setNewDate ] = useState()
 
+  // load all reservations on initial page load, then whenever currentDay is updated
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
@@ -21,28 +25,50 @@ function Dashboard({ date }) {
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
-  }
+  };
+
+  const goBack = (event) => {
+    event.preventDefault();
+    // get current date, subtract 24hrs to get day before
+    // load reservations from that day
+    setCurrentDay(previous(currentDay));
+  };
+
+  const goToday = (event) => {
+    event.preventDefault();
+    setCurrentDay(today())
+  };
+
+  const goNext = (event) => {
+    event.preventDefault();
+    // get current date, add 24hrs to get day after
+    // load reservations from that day
+    setCurrentDay(next(today()));
+  };
+
+
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
-        <div class="btn-group" role="group" aria-label="navigation buttons">
-          <a class="btn btn-secondary" href="/dashboard?date=2022-04-12">
-            <span class="oi oi-chevron-left"></span>
+        <div className="btn-group" role="group" aria-label="navigation buttons">
+          <button className="btn btn-secondary" onClick={(goBack)}>
+            <span className="oi oi-chevron-left"></span>
             &nbsp;Previous
-            </a>
-            <a class="btn btn-secondary" href="/dashboard?date=2022-04-13">
+            </button>
+            <button className="btn btn-secondary" onClick={goToday}>
               Today
-              </a>
-              <a class="btn btn-secondary" href="/dashboard?date=2022-04-14">
+              </button>
+              <button className="btn btn-secondary" onClick={goNext}>
                 Next&nbsp;<
                   span class="oi oi-chevron-right"></span>
-                  </a>
+                  </button>
                   </div>
       </div>
       <ErrorAlert error={reservationsError} />
+      <div>{currentDay}</div>      
       {JSON.stringify(reservations)}
     </main>
   );
