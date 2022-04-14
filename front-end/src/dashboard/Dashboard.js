@@ -13,7 +13,7 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [ currentDay, setCurrentDay ] = useState(date)
-  const [ newDate, setNewDate ] = useState()
+  // const [ newDate, setNewDate ] = useState()
 
   // load all reservations on initial page load, then whenever currentDay is updated
   useEffect(loadDashboard, [date]);
@@ -68,8 +68,33 @@ function Dashboard({ date }) {
                   </div>
       </div>
       <ErrorAlert error={reservationsError} />
-      <div>{currentDay}</div>      
-      {JSON.stringify(reservations)}
+      <div>{currentDay}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Phone</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>People</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reservations.map((reservation, index) => (
+            reservation.reservation_date === currentDay &&
+            <tr key={index}>
+            <td>{index}</td>
+            <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
+            <td>{reservation.mobile_number}</td>
+            <td>{reservation.reservation_date}</td>
+            <td>{reservation.reservation_time}</td>
+            <td>{reservation.people}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>      
+      
     </main>
   );
 }
