@@ -29,6 +29,8 @@ const initialFormState = {
 
 const [ formData, setFormData ] = useState({ ...initialFormState });
 
+// const [ avar, setAvar ] = useState(false);
+
 const history = useHistory();
 
 const handleChange = ({ target }) => {
@@ -48,22 +50,21 @@ const handleSubmit = async (event) => {
     let e = formData.reservation_time;
     let f = formData.people;
 
+    // console.log(formData);
 
     // if one of inputs are empty show alert
+
     // if (e < 1030){window.alert('Please choose a time during opening hours')}
     if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){window.alert('Invalid Input')}
-    else if (d === "tuesday") {window.alert("Please choose a time during opening days")}
     else {
+        console.log(formData);
         const ac = new AbortController();
-        createReservation(formData, ac.signal);
-
-    //   await createReservation(formData);
-        history.push(`/reservations`);
+        await createReservation(formData, ac.signal);
+       
     }
     
     // reset form state
-    setFormData(initialFormState);
-    history.go("/");
+
   };
 
   const handleCancel = (event) => {
@@ -75,6 +76,13 @@ const handleSubmit = async (event) => {
     return (
         <main>
             <p>Hello</p>
+            {
+<           div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Well done!</h4>
+            <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+            <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+            </div>
+            }      
             <form>
         <label>
             First Name:

@@ -13,7 +13,7 @@ function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   // const [ currentDay, setCurrentDay ] = useState(date);
-  const [ currentDay, setCurrentDay ] = useState("2020-12-30");
+  const [ currentDay, setCurrentDay ] = useState(today());
   console.log("today", currentDay)
   // const [ newDate, setNewDate ] = useState()
 
@@ -62,21 +62,24 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
         <div className="btn-group" role="group" aria-label="navigation buttons">
-          <button className="btn btn-secondary" onClick={(goBack)}>
-            <span className="oi oi-chevron-left"></span>
-            &nbsp;Previous
-            </button>
-            <button className="btn btn-secondary" onClick={goToday}>
-              Today
-              </button>
-              <button className="btn btn-secondary" onClick={goNext}>
-                Next&nbsp;<
-                  span class="oi oi-chevron-right"></span>
-                  </button>
-                  </div>
+        <button className="btn btn-secondary" onClick={(goBack)}>
+        <span className="oi oi-chevron-left"></span>
+        &nbsp;Previous
+        </button>
+        <button className="btn btn-secondary" onClick={goToday}>
+        Today
+        </button>
+        <button className="btn btn-secondary" onClick={goNext}>
+        Next&nbsp;<
+        span class="oi oi-chevron-right"></span>
+        </button>
+        </div>
       </div>
+
       <ErrorAlert error={reservationsError} />
+
       <div>{currentDay}</div>
+      
       <table>
         <thead>
           <tr>

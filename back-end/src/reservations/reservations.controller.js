@@ -36,7 +36,7 @@ function hasOnlyValidProperties(req, res, next) {
   const invalidFields = Object.keys(data).filter(
     (field) => {
       if (field === reservation_date) console.log(field);
-      !VALID_PROPERTIES.includes(field)
+      !VALID_PROPERTIES.includes(field);   
     }
   );
 
@@ -67,5 +67,5 @@ async function create(req, res, next) {
 
 module.exports = {
   list,
-  create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
+  create: [ create ],
 };
