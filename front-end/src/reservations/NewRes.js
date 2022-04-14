@@ -50,10 +50,19 @@ const handleSubmit = async (event) => {
     let e = formData.reservation_time;
     let f = formData.people;
 
-    // console.log(formData);
+    console.log(d);
 
     // if one of inputs are empty show alert
 
+    // if reservation date is before validation:
+    // const Startdate = new Date(document.getElementById("Insert ID here").value)
+    // const now = new Date();
+    // if (before < now) {
+    //   // selected date is in the past
+    // window.alert("Date must be in the future")
+    // } 
+    
+    
     // if (e < 1030){window.alert('Please choose a time during opening hours')}
     if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){window.alert('Invalid Input')}
     else {
