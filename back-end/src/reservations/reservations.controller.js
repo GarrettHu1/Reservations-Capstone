@@ -58,7 +58,7 @@ async function create(req, res, next) {
   const newReservation = {
     ...req.body.data
   }
-  const data = await ServiceWorker.create(newReservation);
+  const data = await service.create(newReservation);
   res.status(201).json({ data: data })
 };
 
