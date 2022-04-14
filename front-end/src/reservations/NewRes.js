@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+import { createReservation } from "../utils/api"
 
 // route: /reservations/new
 
@@ -54,30 +54,8 @@ const handleSubmit = async (event) => {
     if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){window.alert('Invalid Input')}
     else if (d === "tuesday") {window.alert("Please choose a time during opening days")}
     else {
-        // const requestOptions = {
-        //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        //     mode: 'cors', // no-cors, *cors, same-origin
-        //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        //     credentials: 'same-origin', // include, *same-origin, omit
-        // };
-        // fetch(`${API_BASE_URL}/reservations`, requestOptions)
-        //     .then(response => response.json())
-        //     .then(data => this.setState({ postId: data.id }));
-
-        const response = await fetch(`${API_BASE_URL}/reservations`, {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, *cors, same-origin
-            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-              'Content-Type': 'application/json'
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            redirect: 'follow', // manual, *follow, error
-            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: JSON.stringify(formData) // body data type must match "Content-Type" header
-          });
-          console.log(response);
+        const ac = new AbortController();
+        createReservation(formData, ac.signal);
 
     //   await createReservation(formData);
         history.push(`/reservations`);
@@ -90,11 +68,9 @@ const handleSubmit = async (event) => {
 
   const handleCancel = (event) => {
     event.preventDefault();
+    setFormData(initialFormState);
     history.goBack();
   };
-
-  
-
 
     return (
         <main>

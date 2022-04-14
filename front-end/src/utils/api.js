@@ -69,3 +69,38 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+// cancel in-flight api calls
+// const ac = new AbortController();
+
+export async function createReservation(formData, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations`);
+
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({formData}),
+    signal
+  };
+
+  return await fetchJson(url, options, formData)
+};
+
+export async function readReservation(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`
+
+  // if method not specified, defaults to get
+  return await fetchJson(url, {headers, signal}, {});
+}
+
+export async function request(url, options) {
+  try {
+    const response = await fetch(url, options);
+    // verify status is 200
+    if (response.status === 200) {
+      const {data} = await response.json();
+      return data;
+    }
+  } catch (error) {
+    throw error;
+  }
+}

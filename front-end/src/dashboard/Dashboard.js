@@ -12,7 +12,9 @@ import { previous, today, next } from "../utils/date-time"
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [ currentDay, setCurrentDay ] = useState(date)
+  // const [ currentDay, setCurrentDay ] = useState(date);
+  const [ currentDay, setCurrentDay ] = useState("2020-12-30");
+  console.log("today", currentDay)
   // const [ newDate, setNewDate ] = useState()
 
   // load all reservations on initial page load, then whenever currentDay is updated
@@ -26,6 +28,11 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
     return () => abortController.abort();
   };
+
+  const reservationsForCurrentDate = reservations.filter((reservations) => reservations.reservation_date === currentDay)
+
+  const sortedReservations = reservationsForCurrentDate.sort((a, b) => Number(a.reservation_time.slice(0,2)) - Number(b.reservation_time.slice(0,2)));
+  console.log(sortedReservations);
 
   const goBack = (event) => {
     event.preventDefault();
@@ -46,7 +53,8 @@ function Dashboard({ date }) {
     setCurrentDay(next(today()));
   };
 
-
+  // reservations for current day validation: line 89
+  // reservation.reservation_date === currentDay &&
 
   return (
     <main>
@@ -81,8 +89,7 @@ function Dashboard({ date }) {
           </tr>
         </thead>
         <tbody>
-          {reservations.map((reservation, index) => (
-            reservation.reservation_date === currentDay &&
+          {sortedReservations.map((reservation, index) => (
             <tr key={index}>
             <td>{index}</td>
             <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
@@ -93,7 +100,7 @@ function Dashboard({ date }) {
             </tr>
           ))}
         </tbody>
-      </table>      
+      </table>
       
     </main>
   );

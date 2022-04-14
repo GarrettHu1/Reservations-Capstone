@@ -1,21 +1,24 @@
 const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const {today} = require("../utils/date-time")
 
 /**
  * List handler for reservation resources
  */
 async function list(req, res) {
   // lists all reservations for a day (from query)
-
   
   const day = req.query.date;
   console.log(day)
   const data = await service.list();
-  console.log(data)
-  // const dataForDate = data.filter((data) => data.reservations_date === day)
+  
+  // const sorted = data.sort((a, b) => Number(a.reservation_time) - Number(b.reservation_time))
 
-  res.json({data: data});
+  // console.log(sorted);
+   const dataForDate = data.filter((data) => data.reservations_date === day)
+   console.log(dataForDate);
+  res.json({data: dataForDate});
 }
 
 const VALID_PROPERTIES = [
