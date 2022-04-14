@@ -31,7 +31,10 @@ function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
 
   const invalidFields = Object.keys(data).filter(
-    (field) => !VALID_PROPERTIES.includes(field)
+    (field) => {
+      if (field === reservation_date) console.log(field);
+      !VALID_PROPERTIES.includes(field)
+    }
   );
 
   if (invalidFields.length) {
