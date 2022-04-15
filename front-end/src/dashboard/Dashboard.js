@@ -29,10 +29,10 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   };
 
-  const reservationsForCurrentDate = reservations.filter((reservations) => reservations.reservation_date === currentDay)
+  // const reservationsForCurrentDate = reservations.filter((reservations) => reservations.reservation_date === currentDay)
 
-  const sortedReservations = reservationsForCurrentDate.sort((a, b) => Number(a.reservation_time.slice(0,2)) - Number(b.reservation_time.slice(0,2)));
-  console.log(sortedReservations);
+  // const sortedReservations = reservationsForCurrentDate.sort((a, b) => Number(a.reservation_time.slice(0,2)) - Number(b.reservation_time.slice(0,2)));
+  // console.log(sortedReservations);
 
   const goBack = (event) => {
     event.preventDefault();
@@ -92,7 +92,7 @@ function Dashboard({ date }) {
           </tr>
         </thead>
         <tbody>
-          {sortedReservations.map((reservation, index) => (
+          {reservations.map((reservation, index) => (
             <tr key={index}>
             <td>{index}</td>
             <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>

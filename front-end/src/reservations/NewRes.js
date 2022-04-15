@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservations, createReservation } from "../utils/api"
+import { createReservation } from "../utils/api"
 import { today } from "../utils/date-time"
 
 // route: /reservations/new
@@ -40,23 +40,12 @@ const handleChange = ({ target }) => {
 
 const handleSubmit = async (event) => {
     event.preventDefault();
-    let a = formData.name;
+    let a = formData.first_name;
     let b = formData.last_name;
     let c = formData.mobile_number;
     let d = formData.reservation_date;
     let e = formData.reservation_time;
     let f = formData.people;
-
-    // if one of inputs are empty show alert
-
-    // if reservation date is before validation:
-    // const resDate = d;
-    // const now = today();
-    // if (resDate < now) {
-    //   // selected date is in the past
-    // window.alert("Date must be in the future")
-    // } 
-    
   
     if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){
         window.alert('Invalid Input')
@@ -65,11 +54,10 @@ const handleSubmit = async (event) => {
         console.log(formData);
         const ac = new AbortController();
         await createReservation(formData, ac.signal);
-       
-    }
-    
-    // reset form state
 
+        setFormData(initialFormState);
+        history.push(`/dashboard?date=${d}`);
+    }
   };
 
   const handleCancel = (event) => {
