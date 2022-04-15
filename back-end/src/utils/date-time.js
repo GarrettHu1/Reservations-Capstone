@@ -82,5 +82,6 @@ function next(currentDate) {
 }
 
 module.exports = {
-  today
+  today,
+  asDateString,
 }

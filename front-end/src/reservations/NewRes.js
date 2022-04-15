@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api"
+import { listReservations, createReservation } from "../utils/api"
+import { today } from "../utils/date-time"
 
 // route: /reservations/new
 
@@ -28,9 +29,6 @@ const initialFormState = {
 };
 
 const [ formData, setFormData ] = useState({ ...initialFormState });
-
-// const [ avar, setAvar ] = useState(false);
-
 const history = useHistory();
 
 const handleChange = ({ target }) => {
@@ -38,8 +36,7 @@ const handleChange = ({ target }) => {
       ...formData,
       [target.name]: target.value,
     });
-  };
-  
+  };  
 
 const handleSubmit = async (event) => {
     event.preventDefault();
@@ -50,22 +47,21 @@ const handleSubmit = async (event) => {
     let e = formData.reservation_time;
     let f = formData.people;
 
-    console.log(d);
-
     // if one of inputs are empty show alert
 
     // if reservation date is before validation:
-    // const Startdate = new Date(document.getElementById("Insert ID here").value)
-    // const now = new Date();
-    // if (before < now) {
+    // const resDate = d;
+    // const now = today();
+    // if (resDate < now) {
     //   // selected date is in the past
     // window.alert("Date must be in the future")
     // } 
     
-    
-    // if (e < 1030){window.alert('Please choose a time during opening hours')}
-    if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){window.alert('Invalid Input')}
-    else {
+  
+    if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){
+        window.alert('Invalid Input')
+        
+    } else {
         console.log(formData);
         const ac = new AbortController();
         await createReservation(formData, ac.signal);
@@ -85,13 +81,7 @@ const handleSubmit = async (event) => {
     return (
         <main>
             <p>Hello</p>
-            {
-<           div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">Well done!</h4>
-            <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-            <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
-            </div>
-            }      
+
             <form>
         <label>
             First Name:
