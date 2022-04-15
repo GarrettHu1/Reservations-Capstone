@@ -12,11 +12,16 @@ router
   .route("/")
   .get(controller.list)
   .post(controller.create)
-  .all(methodNotAllowed)
+  .all(methodNotAllowed);
 
   router
   .route("/new")
   .post(controller.create)
-  .all(methodNotAllowed)
+  .all(methodNotAllowed);
+
+  router
+  .route("/all")
+  .post(controller.create)
+  .all(methodNotAllowed);
   
 module.exports = router;
