@@ -68,20 +68,47 @@ function validateHhMm(inputField) {
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
+  const d = data.reservation_date;
+  // res date values
+  const resDateFormatted = new Date(d);
+  const reserveDate = new Date(data.reservation_date);
+  const resMonth = Number(d.slice(5, 7));
+  const resDay = Number(d.slice(8, 10));
+  const resYear = Number(d.slice(0, 4));
 
+  // current date values
+  const today = new Date();
+  const year = today.getFullYear();
+  const mes = today.getMonth()+1;
+  const dia = today.getDate();
+
+  // check what day Mon - Sun, 0 - 6
+  const dateValue = resDateFormatted.getDay();  
+  
   const resDate = data.reservation_date;
   const resPeople = data.people;
-  console.log(resPeople)
-  console.log(typeof(resPeople))
   const resTime = data.reservation_time;
 
+  // format validations
   // const dateFormat = 'YYYY-MM-DD';
   // if resdate is not in format, return next({ status: 400, message: "Input is not a valid date"})
   // if resTime is not in format, return next({ status: 400, message: "Input is not a valid time"})
-
   if (!dateIsValid(resDate)) return next({ status: 400, message: `${resDate} is not a valid input for reservation_date`})
   if (typeof(resPeople) !== "number") return next({ status: 400, message: `${resPeople} is not a valid input for people`})
   if (!validateHhMm(resTime)) return next({ status: 400, message: `${resTime} is not a valid input for reservation_time`})
+
+  // reservation date on tuesday validation
+  if (dateValue === 1) return next({ status: 400, message: `Restaurant is closed on Tuesdays ${resDate}`})
+
+  // reservation date values validations
+  if (
+    resYear < year 
+    || (resMonth === mes && resDay < dia) 
+    || resMonth < mes 
+    || (resDay === dia && resMonth === mes && resYear === year && hours > resHour ) ) {
+      return next({ status: 400, message: `reservation_date must be in the future ${resDate}`})
+    };
+
 
   next();
 }
