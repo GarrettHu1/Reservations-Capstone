@@ -6,12 +6,13 @@
  *    a middleware function that validates that req.body.data has the specified non-falsey properties.
  */
  function hasProperties(...properties) {
-    return function (res, req, next) {
-      const { data = {} } = res.body;
+    return function (req, res, next) {
+      const { data = {} } = req.body;
   
       try {
         properties.forEach((property) => {
           const value = data[property];
+          // console.log(value);
           if (!value) {
             const error = new Error(`A '${property}' property is required.`);
             error.status = 400;

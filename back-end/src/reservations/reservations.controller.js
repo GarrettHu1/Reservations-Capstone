@@ -17,6 +17,7 @@ async function list(req, res) {
   const resForDate = [];
   const currentDay = req.query.date;
   const data = await service.list();
+  console.log(data);
   
   data.filter((res) => {
     let date = res.reservation_date;
@@ -33,7 +34,12 @@ async function list(req, res) {
   // console.log("sorted array:", sorted);
   
   res.json({data: sorted});
-}
+};
+
+async function listAll(req, res) {
+  const data = await service.list();
+  res.json({data: data})
+};
 
 // validates input string follows YYYY-MM-DD format
 function dateIsValid(dateStr) {
@@ -57,7 +63,6 @@ function dateIsValid(dateStr) {
 // validates input time follows HH-MM format
 function validateHhMm(inputField) {
   var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputField);
-
   return isValid;
 };
 
@@ -66,6 +71,8 @@ function hasOnlyValidProperties(req, res, next) {
 
   const resDate = data.reservation_date;
   const resPeople = data.people;
+  console.log(resPeople)
+  console.log(typeof(resPeople))
   const resTime = data.reservation_time;
 
   // const dateFormat = 'YYYY-MM-DD';
@@ -90,12 +97,14 @@ const hasReqProps = hasProperties(
 async function create(req, res, next) {
   const newReservation = {
     ...req.body.data
-  }
+  };
+
   const data = await service.create(newReservation);
   res.status(201).json({ data: data })
 };
 
 module.exports = {
   list,
+  listAll,
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ]
 };

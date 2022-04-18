@@ -14,7 +14,7 @@ function Dashboard({ date }) {
   const [reservationsError, setReservationsError] = useState(null);
   // const [ currentDay, setCurrentDay ] = useState(date);
   const [ currentDay, setCurrentDay ] = useState(today());
-  console.log("today", currentDay)
+  // console.log("today", currentDay)
   // const [ newDate, setNewDate ] = useState()
 
   // load all reservations on initial page load, then whenever currentDay is updated
