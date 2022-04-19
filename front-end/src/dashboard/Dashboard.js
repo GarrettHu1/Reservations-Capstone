@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
@@ -39,8 +39,9 @@ function Dashboard({ date }) {
     listReservations(currentDay, abortController.signal)
     .then(setReservations)
     .catch(setReservationsError)
-
   }, [currentDay])
+
+  if (reservationsError) console.log(reservationsError);
 
     // load all reservations on initial page load, then whenever currentDay is updated
     useEffect(loadDash, []);
@@ -53,6 +54,7 @@ function Dashboard({ date }) {
         .catch(setTablesError);
       return () => abortController.abort();
     };
+  if (tablesError) console.log(tablesError);
 
   const goBack = (event) => {
     // event.preventDefault();

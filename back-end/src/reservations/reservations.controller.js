@@ -40,7 +40,7 @@ async function list(req, res) {
     }
   });
 
-  console.log(`resForCurrentDate`, resForCurrentDate)
+  if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
 
   const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
 

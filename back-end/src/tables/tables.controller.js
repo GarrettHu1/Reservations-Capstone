@@ -4,7 +4,9 @@ const hasProperties = require("../errors/hasProperties");
 
 async function list(req, res) {
     const data = await service.list();
+    console.log(data);
     const sortedData = data.sort((a, b) => a.table_name - b.table_name);
+    console.log(sortedData);
     res.json({ data: sortedData });
 };
 
