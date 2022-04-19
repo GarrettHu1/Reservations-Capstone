@@ -32,6 +32,9 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard date={today()} />
       </Route>
+      <Route exact={true} path="/tables/new">
+        <Dashboard date={today()} />
+      </Route>
       <Route>
         <NotFound />
       </Route>

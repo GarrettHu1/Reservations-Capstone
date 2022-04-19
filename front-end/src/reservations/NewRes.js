@@ -131,7 +131,7 @@ const handleSubmit = async (event) => {
         const ac = new AbortController();
         await createReservation(formData, ac.signal);
         // returns user to dashboard
-        history.push(`/dashboard`);
+        history.push(`/dashboard?date=${d}`);
         // clears form 
         // setFormData(initialFormState); 
     }

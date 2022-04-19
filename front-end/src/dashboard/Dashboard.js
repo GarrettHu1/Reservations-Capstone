@@ -12,10 +12,11 @@ import { previous, today, next } from "../utils/date-time"
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  // const [ currentDay, setCurrentDay ] = useState(date);
   const [ currentDay, setCurrentDay ] = useState(today());
-  // console.log("today", currentDay)
-  // const [ newDate, setNewDate ] = useState()
+
+  console.log("today", currentDay)
+
+
 
   // load all reservations on initial page load, then whenever currentDay is updated
   useEffect(loadDashboard, [date]);
@@ -55,7 +56,7 @@ function Dashboard({ date }) {
 
   // reservations for current day validation: line 89
   // reservation.reservation_date === currentDay &&
-
+console.log("Reservations:", reservations)
   return (
     <main>
       <h1>Dashboard</h1>

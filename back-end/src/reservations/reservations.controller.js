@@ -111,7 +111,7 @@ function hasOnlyValidProperties(req, res, next) {
 
 
   next();
-}
+};
 
 const hasReqProps = hasProperties(
 "first_name",
