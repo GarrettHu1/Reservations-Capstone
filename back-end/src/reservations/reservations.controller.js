@@ -13,27 +13,33 @@ function asDateString(date) {
  * List handler for reservation resources
  */
 async function list(req, res) {
-  // lists all reservations for a day (from query)
-  const resForDate = [];
-  const currentDay = req.query.date;
+  const dateFromQuery = req.query;
+
+  let newDate = [];
+  for (const index in dateFromQuery) {
+    newDate.push(dateFromQuery[index]);
+  }
+  const formattedDate = newDate.join("");
+  // console.log(formattedDate)
+
   const data = await service.list();
-  console.log(data);
+  // console.log(data);
   
-  data.filter((res) => {
-    let date = res.reservation_date;
-    let formattedDate = new Date(date);
-    let asString = asDateString(formattedDate);
-    // console.log(asString)
-    // console.log("formatted:", asString, "Current day:", currentDay)
-    // console.log(asString === currentDay)
-    // pushes reservation where date is equal to date from query
-    if (asString === currentDay) resForDate.push(res)
+  const resForCurrentDate = data.filter((res) => {
+    let resDateAsString = asDateString(new Date(res.reservation_date))
+    // if reservation date matches date from query, push into resForCurrentDate array
+    if (resDateAsString === formattedDate) {
+      // console.log(res)
+      return res
+    }
   });
-  // console.log(resForDate);
-  const sorted = resForDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
-  // console.log("sorted array:", sorted);
+
+  console.log(`resForCurrentDate`, resForCurrentDate)
+
+  const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
+
   
-  res.json({data: sorted});
+  res.json({data: sortedReservations});
 };
 
 async function listAll(req, res) {

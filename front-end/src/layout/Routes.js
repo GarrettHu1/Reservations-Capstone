@@ -6,6 +6,7 @@ import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import NewRes from "../reservations/NewRes";
 import AllReservations from "../reservations/allReservations";
+import NewTable from "../tables/Newtable";
 
 /**
  * Defines all the routes for the application.
@@ -33,7 +34,7 @@ function Routes() {
         <Dashboard date={today()} />
       </Route>
       <Route exact={true} path="/tables/new">
-        <Dashboard date={today()} />
+        <NewTable />
       </Route>
       <Route>
         <NotFound />

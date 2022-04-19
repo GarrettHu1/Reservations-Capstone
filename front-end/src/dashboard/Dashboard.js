@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
@@ -16,21 +17,30 @@ function Dashboard({ date }) {
   const [ tablesError, setTablesError ] = useState(null);
   const [ currentDay, setCurrentDay ] = useState(today());
 
+  const history = useHistory();
+
   console.log("today", currentDay)
 
-
-
   // load all reservations on initial page load, then whenever currentDay is updated
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [currentDay]);
 
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    listReservations(currentDay, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   };
+
+  useEffect(()=> {
+    const abortController = new AbortController();
+    setReservationsError(null);
+    listReservations(currentDay, abortController.signal)
+    .then(setReservations)
+    .catch(setReservationsError)
+
+  }, [currentDay])
 
     // load all reservations on initial page load, then whenever currentDay is updated
     useEffect(loadDash, []);
@@ -45,27 +55,28 @@ function Dashboard({ date }) {
     };
 
   const goBack = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     // get current date, subtract 24hrs to get day before
     // load reservations from that day
     setCurrentDay(previous(currentDay));
+    history.push(`/dashboard?date=${currentDay}`);
   };
 
   const goToday = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     setCurrentDay(today())
+    history.push(`/dashboard?date=${currentDay}`);
   };
 
   const goNext = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     // get current date, add 24hrs to get day after
-    // load reservations from that day
-    setCurrentDay(next(today()));
+    // load dashboard containing reservations from query for that day
+    setCurrentDay(next(currentDay));
+    history.push(`/dashboard?date=${currentDay}`);
   };
 
-  // reservations for current day validation: line 89
-  // reservation.reservation_date === currentDay &&
-console.log("Reservations:", reservations)
+
   return (
     <main>
       <h1>Dashboard</h1>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api"
 
-export default function NewRes() {
+export default function NewTable() {
 
 const initialFormState = {
     table_name: "",
