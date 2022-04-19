@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
@@ -121,6 +121,12 @@ function Dashboard({ date }) {
             <td>{reservation.reservation_date}</td>
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
+            <td>
+            <button className="btn btn-secondary" 
+            onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>
+            Seat
+            </button>
+            </td>
             </tr>
           ))}
         </tbody>
@@ -141,7 +147,7 @@ function Dashboard({ date }) {
             <td>{index}</td>
             <td>{`${table.table_name}`}</td>
             <td>{table.capacity}</td>
-            <td>{`Free`}</td>
+            <td>{`Free`}</td>         
             </tr>
           ))}
         </tbody>
