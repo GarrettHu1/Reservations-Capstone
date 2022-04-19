@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
 
@@ -10,8 +10,10 @@ import { previous, today, next } from "../utils/date-time"
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
-  const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
+  const [ reservations, setReservations ] = useState([]);
+  const [ reservationsError, setReservationsError ] = useState(null);
+  const [ tables, setTables ] = useState([]);
+  const [ tablesError, setTablesError ] = useState(null);
   const [ currentDay, setCurrentDay ] = useState(today());
 
   console.log("today", currentDay)
@@ -30,10 +32,17 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   };
 
-  // const reservationsForCurrentDate = reservations.filter((reservations) => reservations.reservation_date === currentDay)
+    // load all reservations on initial page load, then whenever currentDay is updated
+    useEffect(loadDash, []);
 
-  // const sortedReservations = reservationsForCurrentDate.sort((a, b) => Number(a.reservation_time.slice(0,2)) - Number(b.reservation_time.slice(0,2)));
-  // console.log(sortedReservations);
+    function loadDash() {
+      const abortController = new AbortController();
+      setTablesError(null);
+      listTables(abortController.signal)
+        .then(setTables)
+        .catch(setTablesError);
+      return () => abortController.abort();
+    };
 
   const goBack = (event) => {
     event.preventDefault();
@@ -106,6 +115,27 @@ console.log("Reservations:", reservations)
         </tbody>
       </table>
       
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Table Name</th>
+            <th>Capacity</th>
+            <th>Free?</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tables.map((table, index) => (
+            <tr key={index}>
+            <td>{index}</td>
+            <td>{`${table.table_name}`}</td>
+            <td>{table.capacity}</td>
+            <td>{`Free`}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
     </main>
   );
 }
