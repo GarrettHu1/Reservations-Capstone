@@ -1,6 +1,7 @@
 const service = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const today = require("../utils/date-time")
 
 // converts date to YYYY-MM-DD format
 function asDateString(date) {
@@ -13,7 +14,12 @@ function asDateString(date) {
  * List handler for reservation resources
  */
 async function list(req, res) {
-  const dateFromQuery = req.query;
+  let dateFromQuery = req.query;
+  // backup, defaults dateFromQuery to today,
+  if (!dateFromQuery) {
+    dateFromQuery = today();
+  };
+  // console.log(`dateFromQuery`, dateFromQuery);
 
   let newDate = [];
   for (const index in dateFromQuery) {
