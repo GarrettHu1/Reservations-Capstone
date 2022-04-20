@@ -93,6 +93,7 @@ function hasOnlyValidProperties(req, res, next) {
   const year = today.getFullYear();
   const mes = today.getMonth()+1;
   const dia = today.getDate();
+  const hours = today.getHours();
 
   // check what day Mon - Sun, 0 - 6
   const dateValue = resDateFormatted.getDay();  
@@ -117,7 +118,7 @@ function hasOnlyValidProperties(req, res, next) {
     resYear < year 
     || (resMonth === mes && resDay < dia) 
     || resMonth < mes 
-    || (resDay === dia && resMonth === mes && resYear === year && hours > resHour ) ) {
+    || (resDay === dia && resMonth === mes && resYear === year && hours > resTime ) ) {
       return next({ status: 400, message: `reservation_date must be in the future ${resDate}`})
     };
 

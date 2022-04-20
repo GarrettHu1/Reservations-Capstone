@@ -25,7 +25,6 @@ const initialFormState = {
     reservation_date: "",
     reservation_time: "",
     people: "",
-
 };
 
 const [ formData, setFormData ] = useState({ ...initialFormState });
