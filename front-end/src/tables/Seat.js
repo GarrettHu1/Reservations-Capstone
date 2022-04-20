@@ -3,7 +3,7 @@ import {
     useParams,
     useHistory
   } from "react-router-dom";
-import { listTables } from "../utils/api";
+import { listTables, updateTable } from "../utils/api";
 
 
 export default function Seat() {
@@ -39,11 +39,14 @@ export default function Seat() {
 // ))}
 //   </form>
 
-function handleSubmit(id) {
+async function handleSubmit(tableId) {
     // take resId from params,
     // make put req to "tables" table, at url/${id}/seat with reservation_id: resId
-    console.log("Table Id:", id, "Reservation Id:", reservation_id)
-
+    console.log("Table Id:", tableId, "Reservation Id:", reservation_id)
+    const ids = {"reservation_id": reservation_id, "table_id": tableId}
+    const ac = new AbortController();
+    await updateTable(ids, ac.signal);
+    history.push("/")
 }
 
 const handleCancel = (event) => {
