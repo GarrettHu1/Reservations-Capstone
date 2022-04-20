@@ -11,7 +11,23 @@ function create(newTable) {
     .then((newRes) => newRes[0]);
 };
 
+function read(table_id) {
+    return knex("tables")
+    .select("*")
+    .where({ table_id })
+    .first();
+};
+
+function update(updatedTable) {
+    return knex("tables")
+    .select("*")
+    .where({ table_id: updatedTable.table_id })
+    .update(updatedTable, "*")
+};
+
 module.exports = {
     list,
-    create
+    create,
+    read,
+    update
 };

@@ -125,7 +125,9 @@ function Dashboard({ date }) {
             <td>{reservation.people}</td>
             <td>
             <button className="btn btn-secondary" 
-            onClick={()=>history.push(`/reservations/${reservation.reservation_id}/seat`)}>
+            onClick={()=> {
+              history.push(`/reservations/${reservation.reservation_id}/seat`);
+              }}>
             Seat
             </button>
             </td>
@@ -149,7 +151,7 @@ function Dashboard({ date }) {
             <td>{index}</td>
             <td>{`${table.table_name}`}</td>
             <td>{table.capacity}</td>
-            <td>{`Free`}</td>         
+            <td>{`${table.reservation_id ? "Occupied" : "Free"}`}</td>         
             </tr>
           ))}
         </tbody>

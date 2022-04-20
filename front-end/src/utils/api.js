@@ -115,7 +115,22 @@ export async function readReservation(reservation_id, signal) {
 
   // if method not specified, defaults to get
   return await fetchJson(url, {headers, signal}, {});
-}
+};
+
+export async function updateTable(reservation_id, table_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: reservation_id}),
+    signal
+  };
+  try {
+    const response = await fetch(url, options);
+  } catch (err) {
+    throw err;
+  }
+};
 
 export async function request(url, options) {
   try {

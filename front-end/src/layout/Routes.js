@@ -7,7 +7,7 @@ import { today } from "../utils/date-time";
 import NewRes from "../reservations/NewRes";
 import AllReservations from "../reservations/allReservations";
 import NewTable from "../tables/Newtable";
-import Seat from "./Seat"
+import Seat from "../tables/Seat"
 
 /**
  * Defines all the routes for the application.
