@@ -48,6 +48,46 @@ module.exports = [
       "people": 2,
       "created_at": "2020-12-10T08:31:32.326Z",
       "updated_at": "2020-12-10T08:31:32.326Z"
+    },
+    {
+      "first_name": "First",
+      "last_name": "Last",
+      "mobile_number": "123-456-7890",
+      "reservation_date": "2026-04-20",
+      "reservation_time": "18:00",
+      "people": 2,
+      "created_at": "2020-12-10T08:31:32.326Z",
+      "updated_at": "2020-12-10T08:31:32.326Z"
+    },
+    {
+      "first_name": "First",
+      "last_name": "Last",
+      "mobile_number": "123-456-7890",
+      "reservation_date": "2026-04-21",
+      "reservation_time": "18:00",
+      "people": 2,
+      "created_at": "2020-12-10T08:31:32.326Z",
+      "updated_at": "2020-12-10T08:31:32.326Z"
+    },
+    {
+      "first_name": "First",
+      "last_name": "Last",
+      "mobile_number": "123-456-7890",
+      "reservation_date": "2026-04-22",
+      "reservation_time": "18:00",
+      "people": 2,
+      "created_at": "2020-12-10T08:31:32.326Z",
+      "updated_at": "2020-12-10T08:31:32.326Z"
+    },
+    {
+      "first_name": "First",
+      "last_name": "Last",
+      "mobile_number": "123-456-7890",
+      "reservation_date": "2026-04-23",
+      "reservation_time": "18:00",
+      "people": 2,
+      "created_at": "2020-12-10T08:31:32.326Z",
+      "updated_at": "2020-12-10T08:31:32.326Z"
     }
   ]
   
