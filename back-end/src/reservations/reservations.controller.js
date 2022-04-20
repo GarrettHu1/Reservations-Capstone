@@ -29,7 +29,7 @@ async function list(req, res) {
   // console.log(formattedDate)
 
   const data = await service.list();
-  // console.log(data);
+  console.log("All reservations:", data);
   
   const resForCurrentDate = data.filter((res) => {
     let resDateAsString = asDateString(new Date(res.reservation_date))
@@ -44,7 +44,6 @@ async function list(req, res) {
 
   const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
 
-  
   res.json({data: sortedReservations});
 };
 

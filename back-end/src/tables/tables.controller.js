@@ -22,7 +22,8 @@ function hasOnlyValidProperties(req, res, next) {
     return next();
   };
 
-const hasReqProps = hasProperties(
+  // newTable has required name and capacity props
+const hasReqTableProps = hasProperties(
     "table_name",
     "capacity"
 );
@@ -36,19 +37,21 @@ async function create(req, res, next) {
 };
 
 async function update(req, res, next) {
-    const newTable = {
+    // obj containing id of reservation being seated, and of table 
+    const idValues = {
         ...req.body.data
     }
-    console.log(newTable);
-    console.log("newTable:", newTable);
-    console.log("reservation_id", newTable.reservation_id);
-    console.log("table_id", newTable.table_id);
-    const tableFromId = await service.read(newTable.table_id);
-    console.log("tableFromId:", tableFromId);
+    // console.log(newTable);
+    // console.log("newTable:", newTable);
+    // console.log("reservation_id", newTable.reservation_id);
+    // console.log("table_id", newTable.table_id);
+
+    const tableFromId = await service.read(idValues.table_id);
+    // console.log("tableFromId:", tableFromId);
 
     const updatedTable = {
         ...tableFromId,
-        reservation_id: newTable.reservation_id
+        reservation_id: idValues.reservation_id
     }
     console.log(updatedTable);
 
@@ -60,7 +63,7 @@ async function update(req, res, next) {
 
 module.exports = {
     list,
-    create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
+    create: [ asyncErrorBoundary(hasReqTableProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
     update: [  asyncErrorBoundary(update) ]
   };
   
