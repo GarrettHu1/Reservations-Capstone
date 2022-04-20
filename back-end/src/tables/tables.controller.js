@@ -36,21 +36,31 @@ async function create(req, res, next) {
 };
 
 async function update(req, res, next) {
-    const { table_id } = req.params;
-    const tableFromId = await service.read(table_id);
+    const newTable = {
+        ...req.body.data
+    }
+    console.log(newTable);
+    console.log("newTable:", newTable);
+    console.log("reservation_id", newTable.reservation_id);
+    console.log("table_id", newTable.table_id);
+    const tableFromId = await service.read(newTable.table_id);
+    console.log("tableFromId:", tableFromId);
 
     const updatedTable = {
         ...tableFromId,
-        ...req.body.data,
-        table_id: tableFromId.table_id
+        reservation_id: newTable.reservation_id
     }
+    console.log(updatedTable);
 
-    res.status(201).json({ date: data })
+    const data = await service.update(updatedTable);
+    console.log("Updated table:", data);
+
+    res.status(201).json({ data: updatedTable });
 }
 
 module.exports = {
     list,
     create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
-    update: [ asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(update) ]
+    update: [  asyncErrorBoundary(update) ]
   };
   
