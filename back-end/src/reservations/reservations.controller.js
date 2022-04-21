@@ -8,7 +8,7 @@ function asDateString(date) {
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
     .toString(10)
     .padStart(2, "0")}-${date.getDate().toString(10).padStart(2, "0")}`;
-}
+};
 
 /**
  * List handler for reservation resources
@@ -26,10 +26,10 @@ async function list(req, res) {
     newDate.push(dateFromQuery[index]);
   }
   const formattedDate = newDate.join("");
-  // console.log(formattedDate)
+  // console.log("Formatted Date:", formattedDate)
 
   const data = await service.list();
-  console.log("All reservations:", data);
+  // console.log("All reservations:", data);
   
   const resForCurrentDate = data.filter((res) => {
     let resDateAsString = asDateString(new Date(res.reservation_date))
@@ -40,7 +40,7 @@ async function list(req, res) {
     }
   });
 
-  if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
+  // if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
 
   const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
 

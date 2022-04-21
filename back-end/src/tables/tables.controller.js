@@ -1,13 +1,13 @@
 const service = require("./tables.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-const controller = require("../reservations/reservations.controller");
+const reservationsController = require("../reservations/reservations.controller");
 
 async function list(req, res) {
     const data = await service.list();
-    console.log("Data:", data);
+    // console.log("Data:", data);
     const sortedData = data.sort((a, b) => a.table_name - b.table_name);
-    console.log("Sorted Data:", sortedData);
+    // console.log("Sorted Data:", sortedData);
     res.json({ data: sortedData });
 };
 
@@ -39,25 +39,38 @@ async function create(req, res, next) {
 
 async function update(req, res, next) {
     // obj containing id of reservation being seated, and of table 
-    const idValues = {
+    const values = {
         ...req.body.data
     };
 
-    // 
+    // reservation to be seated
+    const reservation = values.resToBeSeated;
+    // console.log(reservation)
 
-    const tableFromId = await service.read(idValues.table_id);
+    const tableFromId = await service.read(values.table_id);
     // console.log("tableFromId:", tableFromId);
 
     const updatedTable = {
         ...tableFromId,
-        reservation_id: idValues.reservation_id
+        reservation_id: values.reservation_id
     }
-    console.log(updatedTable);
+    // console.log(updatedTable);
 
-    const data = await service.update(updatedTable);
+    // if could not find reservation return error
+    if (!reservation) return next({ status: 400, message: `Did not find reservation`});
+
+    // if number of people in reservation > table/s capacity, return error
+    if (Number(reservation.people) > Number(updatedTable.capacity)) {
+        return next({
+            status: 400, 
+            message: `Table does not have enough capacity. Seating for ${reservation.people} is needed.`
+        });
+    };
+
+    const newTable = await service.update(updatedTable);
     console.log("Updated table:", data);
 
-    res.status(201).json({ data: updatedTable });
+    res.status(201).json({ data: newTable });
 };
 
 module.exports = {

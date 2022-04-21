@@ -53,7 +53,12 @@ async function handleSubmit(table) {
 
     setSeatErrors([]);
 
-    const ids = {"reservation_id": reservation_id, "table_id": table.table_id}
+    const values = {
+      "reservation_id": reservation_id, 
+      "table_id": table.table_id,
+      "resToBeSeated": resToBeSeated,
+    };
+
     const { people } = resToBeSeated;
     const handleSubErrors = [];
 
@@ -74,7 +79,8 @@ async function handleSubmit(table) {
     // if no errors, sends put request to update reservation_id col in table
     if (handleSubErrors.length === 0) {
     const ac = new AbortController();
-    await updateTable(ids, ac.signal);
+
+    await updateTable(values, ac.signal);
     history.push("/");
   };
 
