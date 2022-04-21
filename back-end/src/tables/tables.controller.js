@@ -13,14 +13,24 @@ async function list(req, res) {
 
 function hasOnlyValidProperties(req, res, next) {
     const { data = {} } = req.body;
+    const a = data.table_name;
     const b = data.capacity;
     const c = data.reservation_id;
-  
-    if (b < 1) {
+    console.log("table data:", b);
+
+    // input validations
+    if (a.length <= 1) {
+        return next({ status: 400, message: `table_name is not valid`});
+    };
+    if (typeof(b) !== "number") {
+        return next({ status: 400, message: `capacity must be a number`});
+    };    
+    if (b.length < 1 || b < 1) {
         return next({ status: 400, message: `Table must seat at least 1 person`});
     };
 
-    return next();
+
+    next();
   };
 
   // newTable has required name and capacity props
@@ -33,6 +43,7 @@ async function create(req, res, next) {
     const newTable = {
         ...req.body.data
     };
+    console.log("newTable:", newTable)
     const data = await service.create(newTable);
     res.status(201).json({ data: data });
 };
@@ -44,8 +55,18 @@ async function update(req, res, next) {
     };
 
     // reservation to be seated
-    const reservation = values.resToBeSeated;
-    // console.log(reservation)
+    // const reservation = values.reservations.find((reservation) => Number(reservation.reservation_id) === Number(values.reservation_id));
+    // reservation from database
+    const reservation = values.reservations
+    // console.log("values reservations:", values.reservations)
+
+    // if could not find reservation return error
+    if (!reservation) return next({ status: 400, message: `Did not find reservation ${reservation}`});    
+    // reservation_id validation
+    // if (!reservation.reservation_id) {
+    //     return next({ status: 400, message: `Reservation id is missing. Received: ${values.reservation_id}` });
+    // };
+
 
     const tableFromId = await service.read(values.table_id);
     // console.log("tableFromId:", tableFromId);
@@ -56,8 +77,7 @@ async function update(req, res, next) {
     }
     // console.log(updatedTable);
 
-    // if could not find reservation return error
-    if (!reservation) return next({ status: 400, message: `Did not find reservation`});
+
 
     // if number of people in reservation > table/s capacity, return error
     if (Number(reservation.people) > Number(updatedTable.capacity)) {

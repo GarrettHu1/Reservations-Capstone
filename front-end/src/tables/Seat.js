@@ -56,7 +56,7 @@ async function handleSubmit(table) {
     const values = {
       "reservation_id": reservation_id, 
       "table_id": table.table_id,
-      "resToBeSeated": resToBeSeated,
+      "reservations": reservations,
     };
 
     const { people } = resToBeSeated;

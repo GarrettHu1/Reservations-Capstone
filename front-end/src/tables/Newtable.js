@@ -39,12 +39,20 @@ const handleSubmit = async (event) => {
     let b = Number(formData.capacity);
     // error mesage
     const capacityError = "Table must have at least person";
+    const capacityIsNanError = "Table capacity must be a number"
+    const tableNameError = "Table name must be longer than 1 character";
 
     if ( a === "" || b === "" ){
         window.alert('Please fill in all values')
     } else {
+        if (a.length <= 1) {
+            handleSubErrors.push(tableNameError);
+        }
         if (b < 1) {
             handleSubErrors.push(capacityError);
+        }
+        if (typeof(b) !== "number") {
+            handleSubErrors.push(capacityIsNanError)
         }
         setErrors(handleSubErrors);
         if (handleSubErrors.length === 0){
