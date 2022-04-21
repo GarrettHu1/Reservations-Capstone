@@ -107,11 +107,10 @@ const handleCancel = (event) => {
             {tables.map((table, index) => (
             <div className="tabledivs">
             Table: {table.table_name} Capacity: {table.capacity}
-            <button onClick={handleCancel} className="btn btn-secondary">Cancel</button>
             <button type="submit" onClick={() => handleSubmit(table)} className="btn btn-primary">Seat</button>  
             </div>              
           ))}
-
+          <button onClick={handleCancel} className="btn btn-secondary">Cancel</button>
         </div>
     )
 }
