@@ -5,9 +5,12 @@ const reservationsController = require("../reservations/reservations.controller"
 
 async function list(req, res) {
     const data = await service.list();
-    // console.log("Data:", data);
-    const sortedData = data.sort((a, b) => a.table_name - b.table_name);
-    // console.log("Sorted Data:", sortedData);
+    console.log("Data:", data);
+    // const sortedData = data.sort((a, b) => a.table_name.replace(/[^A-Z0-9]/ig, "_") - b.table_name.replace(/[^A-Z0-9]/ig, "_") );
+    const sortedData = data.sort(function(a, b) {
+        return /[A-Za-z]/.test(a.table_name) - /[A-Za-z]/.test(b.table_name) || a.table_name.charCodeAt(0) - b.table_name.charCodeAt(0)
+      });
+    console.log("Sorted Data:", sortedData);
     res.json({ data: sortedData });
 };
 
