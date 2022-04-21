@@ -12,8 +12,11 @@ export default function Seat() {
     const { reservation_id } = useParams();
     const [ reservations, setReservations ] = useState([]);
     const [ resError, setResError ] = useState(null);
+    const [ resToBeSeated, setResToBeSeated ] = useState([]);
+
     const [ tables, setTables ] = useState([]);
     const [ tablesError, setTablesError ] = useState(null);
+
     const [ seatErrors, setSeatErrors ] = useState([]);
     const history = useHistory();
 
@@ -35,12 +38,12 @@ export default function Seat() {
     };
   if (tablesError) console.log(tablesError);
 
-  console.log(reservations);
-
-  // finds reservation to be seated from array of reservations for today, using reservation_id from params
-  // const resToBeSeated = reservations.find((reservation) => Number(reservation.reservation_id) === Number(reservation_id));
-    const resToBeSeated = reservations;
-  // console.log(resToBeSeated);
+  // when reservations is updated, sets resToBeSeated to the reservation with matching reservation_id from params
+  useEffect(()=> {
+    const found = reservations.find((reservation) => Number(reservation.reservation_id) === Number(reservation_id));
+    // console.log("found:", found);
+    setResToBeSeated(found);
+  }, [reservations]);
 
 async function handleSubmit(table) {
     // take resId from params,
@@ -89,7 +92,12 @@ const handleCancel = (event) => {
     return (
         <div>
             Seat Reservation:
-            <h3>{`# ${resToBeSeated.reservation_id} - ${resToBeSeated.first_name} ${resToBeSeated.last_name} on ${resToBeSeated.reservation_date} at ${resToBeSeated.reservation_time} for ${resToBeSeated.people}`}</h3>
+            {resToBeSeated &&
+            <h3>{`# ${resToBeSeated.reservation_id} - 
+            ${resToBeSeated.first_name} ${resToBeSeated.last_name} on 
+            ${resToBeSeated.reservation_date} at 
+            ${resToBeSeated.reservation_time} for 
+            ${resToBeSeated.people}`}</h3>}
             {seatErrors.length > 0 &&
             <div className="alert alert-danger" role="alert" >
                 Please fix the following errors:
