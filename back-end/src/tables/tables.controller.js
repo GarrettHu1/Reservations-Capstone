@@ -1,6 +1,7 @@
 const service = require("./tables.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const controller = require("../reservations/reservations.controller");
 
 async function list(req, res) {
     const data = await service.list();
@@ -40,11 +41,9 @@ async function update(req, res, next) {
     // obj containing id of reservation being seated, and of table 
     const idValues = {
         ...req.body.data
-    }
-    // console.log(newTable);
-    // console.log("newTable:", newTable);
-    // console.log("reservation_id", newTable.reservation_id);
-    // console.log("table_id", newTable.table_id);
+    };
+
+    // 
 
     const tableFromId = await service.read(idValues.table_id);
     // console.log("tableFromId:", tableFromId);
@@ -59,7 +58,7 @@ async function update(req, res, next) {
     console.log("Updated table:", data);
 
     res.status(201).json({ data: updatedTable });
-}
+};
 
 module.exports = {
     list,

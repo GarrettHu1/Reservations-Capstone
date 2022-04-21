@@ -153,6 +153,5 @@ async function read(req, res, next) {
 
 module.exports = {
   list,
-  listAll,
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ]
 };
