@@ -38,8 +38,8 @@ export default function Seat() {
   console.log(reservations);
 
   // finds reservation to be seated from array of reservations for today, using reservation_id from params
-  const resToBeSeated = reservations.find((reservation) => Number(reservation.reservation_id) === Number(reservation_id));
-    // const resToBeSeated = reservations;
+  // const resToBeSeated = reservations.find((reservation) => Number(reservation.reservation_id) === Number(reservation_id));
+    const resToBeSeated = reservations;
   // console.log(resToBeSeated);
 
 async function handleSubmit(table) {
