@@ -143,12 +143,12 @@ async function create(req, res, next) {
 };
 
 async function read(req, res, next) {
-  const { reservation_id } = req.params;
-  console.log("Res Id:", reservation_id);
+  const { reservationId } = req.params;
+  console.log("Res Id:", reservationId);
 
-  const data = await service.read(reservation_id);
+  const data = await service.read(reservationId);
 
-  res.status(201).json({ data: data })
+  res.status(200).json({ data: data })
 }
 
 module.exports = {

@@ -5,12 +5,12 @@ const reservationsController = require("../reservations/reservations.controller"
 
 async function list(req, res) {
     const data = await service.list();
-    console.log("Data:", data);
+    // console.log("Data:", data);
     // const sortedData = data.sort((a, b) => a.table_name.replace(/[^A-Z0-9]/ig, "_") - b.table_name.replace(/[^A-Z0-9]/ig, "_") );
     const sortedData = data.sort(function(a, b) {
         return /[A-Za-z]/.test(a.table_name) - /[A-Za-z]/.test(b.table_name) || a.table_name.charCodeAt(0) - b.table_name.charCodeAt(0)
       });
-    console.log("Sorted Data:", sortedData);
+    // console.log("Sorted Data:", sortedData);
     res.json({ data: sortedData });
 };
 
@@ -19,7 +19,7 @@ function hasOnlyValidProperties(req, res, next) {
     const a = data.table_name;
     const b = data.capacity;
     const c = data.reservation_id;
-    console.log("table data:", b);
+    // console.log("table data:", b);
 
     // input validations
     if (a.length <= 1) {
@@ -46,7 +46,7 @@ async function create(req, res, next) {
     const newTable = {
         ...req.body.data
     };
-    console.log("newTable:", newTable)
+    // console.log("newTable:", newTable)
     const data = await service.create(newTable);
     res.status(201).json({ data: data });
 };
@@ -91,7 +91,7 @@ async function update(req, res, next) {
     };
 
     const newTable = await service.update(updatedTable);
-    console.log("Updated table:", data);
+    // console.log("Updated table:", data);
 
     res.status(201).json({ data: newTable });
 };
