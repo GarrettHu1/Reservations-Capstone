@@ -142,6 +142,15 @@ async function create(req, res, next) {
   res.status(201).json({ data: data })
 };
 
+async function read(req, res, next) {
+  const { reservation_id } = req.params;
+  console.log("Res Id:", reservation_id);
+
+  const data = await service.read(reservation_id);
+
+  res.status(201).json({ data: data })
+}
+
 module.exports = {
   list,
   listAll,

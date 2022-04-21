@@ -1,20 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api"
-// import { today } from "../utils/date-time"
-
-// route: /reservations/new
-
-// Form containing follow fields:
-// First name: `<input name="first_name" />`
-// Last name: `<input name="last_name" />`
-// Mobile number: `<input name="mobile_number" />`
-// Date of reservation: `<input name="reservation_date" />`
-// Time of reservation: `<input name="reservation_time" />`
-// Number of people in the party, which must be at least 1 person. 
-// `<input name="people" />`
-
-
 
 export default function NewRes() {
 
@@ -125,7 +111,8 @@ const handleSubmit = async (event) => {
             handleSubErrors.push(openingHoursError);
         }
 
-        setErrors(handleSubErrors)
+        setErrors(handleSubErrors);
+
         if (handleSubErrors.length === 0){
         const ac = new AbortController();
         await createReservation(formData, ac.signal);

@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
+import Seat from "../tables/Seat"
 
 /**
  * Defines the dashboard page.
@@ -126,6 +127,7 @@ function Dashboard({ date }) {
             <td>
             <button className="btn btn-secondary" 
             onClick={()=> {
+              <Seat values={"1"}/>
               history.push(`/reservations/${reservation.reservation_id}/seat`);
               }}>
             Seat
