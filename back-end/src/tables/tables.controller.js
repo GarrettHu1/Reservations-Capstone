@@ -87,13 +87,20 @@ async function destroy(req, res, next) {
     // receives table_id, then removes/replaces res_id with null
     const { tableId } = req.params;
 
-    const tableFromId = await service.read(values.table_id);
+    const tableFromId = await service.read(tableId);
+
+    if (!tableFromId) return next({ status: 404, message: `table_id ${tableId} does not exist`}); 
+
+    if (!tableFromId.reservation_id) {
+        return next({ status: 400, message: `table_id ${tableId} is not occupied`}); 
+    };
+
     const updatedTable = {
         ...tableFromId,
         reservation_id: null
     }
-    await service.delete(updatedTable)
-    res.status(204)
+    await service.delete(updatedTable);
+    res.sendStatus(200);
 }
 
 module.exports = {

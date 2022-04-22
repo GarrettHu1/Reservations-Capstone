@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservations, listTables } from "../utils/api";
+import { listReservations, listTables, deleteRes } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
 import Seat from "../tables/Seat"
@@ -79,8 +79,13 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${currentDay}`);
   };
 
-  async function handleFinish(res) {
+  async function handleFinish(id) {
     // make a del req to tables, remove reservation_id
+    if (window.confirm("Is this table ready to seat new guests?")) {
+    const ac = new AbortController();
+    await deleteRes(id, ac.signal);   
+    history.push(`/dashboard?date=${currentDay}`);
+    };
   };
 
 
@@ -131,7 +136,6 @@ function Dashboard({ date }) {
             <td>
             <button className="btn btn-secondary" 
             onClick={()=> {
-              <Seat values={"1"}/>
               history.push(`/reservations/${reservation.reservation_id}/seat`);
               }}>
             Seat
@@ -165,7 +169,7 @@ function Dashboard({ date }) {
             <td>{table.capacity}</td>
             <td>{`${table.reservation_id ? "Occupied" : "Free"}`}</td>        
             <td>{ table.reservation_id && 
-            <button className="btn btn-secondary" onClick={() => handleFinish }>Finish</button> }
+            <button className="btn btn-secondary" onClick={() => handleFinish(table.table_id) }>Finish</button> }
             </td>
             </tr>
           ))}
