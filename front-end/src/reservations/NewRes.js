@@ -29,7 +29,6 @@ const handleChange = ({ target }) => {
       ...formData,
       [target.name]: target.value,
     });}
-
   };  
 
 const handleSubmit = async (event) => {
