@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { listReservations, listTables, deleteRes } from "../utils/api";
+import { listReservations, listTables, deleteRes, updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
 
@@ -78,15 +78,19 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${currentDay}`);
   };
 
-  async function handleFinish(id) {
+  async function handleFinish(tableId, resId) {
     // make a del req to tables, remove reservation_id
     if (window.confirm("Is this table ready to seat new guests?")) {
     const ac = new AbortController();
-    await deleteRes(id, ac.signal);
+    deleteRes(tableId, ac.signal);
+    console.log("handleFinish:", resId)
+    updateReservationStatus(resId, ac.signal);
     history.push("/")
     };
   };
 
+  // filters reservations to only return those with "booked" or "seated" status
+  const filteredReservations = reservations.filter((reservation) => reservation.status === "booked" || reservation.status === "seated")
 
   return (
     <main>
@@ -123,7 +127,7 @@ function Dashboard({ date }) {
           </tr>
         </thead>
         <tbody>
-          {reservations.map((reservation, index) => (
+          {filteredReservations.length > 0 ? filteredReservations.map((reservation, index) => (
             <tr key={index}>
             <td>{index}</td>
             <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
@@ -144,7 +148,7 @@ function Dashboard({ date }) {
             <td><button className="btn btn-secondary" >Edit</button></td>
             <td><button className="btn btn-secondary" >Cancel</button></td>            
             </tr>
-          ))}
+          )) : "No Reservations Found"}
         </tbody>
       </table>
       
@@ -165,7 +169,7 @@ function Dashboard({ date }) {
             <td>{table.capacity}</td>
             <td>{`${table.reservation_id ? "Occupied" : "Free"}`}</td>        
             <td>{ table.reservation_id && 
-            <button className="btn btn-secondary" onClick={() => handleFinish(table.table_id) }>Finish</button> }
+            <button className="btn btn-secondary" onClick={() => handleFinish(table.table_id, table.reservation_id) }>Finish</button> }
             </td>
             </tr>
           ))}

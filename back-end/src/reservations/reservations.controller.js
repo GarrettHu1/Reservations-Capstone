@@ -171,11 +171,16 @@ async function updateStatus(req, res, next) {
   // const { reservationId } = req.params;
 
   console.log("updateStatus, Reservation to update:", res.locals.reservation)
+  const resWithUpdatedStatus = res.locals.reservation;
 
-  const resWithUpdatedStatus = {
-    ...res.locals.reservation,
-    status: "seated"
-  };
+  // if status is booked, set new res status to seated. else set to finished
+  if (resWithUpdatedStatus.status === "seated") {
+    resWithUpdatedStatus.status = "finished"
+  } else {
+    resWithUpdatedStatus.status = "seated"
+  }
+
+  console.log("resWithUpdatedStatus", resWithUpdatedStatus)
 
   const data = await service.updateStatus(resWithUpdatedStatus);
   console.log("updateStatus, updated seated reservation", data)

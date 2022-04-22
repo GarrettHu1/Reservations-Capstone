@@ -3,7 +3,7 @@ import {
     useParams,
     useHistory
   } from "react-router-dom";
-import { listTables, updateTable, listReservations, seatReservation } from "../utils/api";
+import { listTables, updateTable, listReservations, updateReservationStatus } from "../utils/api";
 import { today } from "../utils/date-time";
 
 
@@ -81,9 +81,9 @@ async function handleSeat(table) {
     if (handleSubErrors.length === 0) {
     const ac = new AbortController();
     console.log(reservation_id)
-    seatReservation(reservation_id, ac.signal);
+    updateReservationStatus(reservation_id, ac.signal);
     updateTable(values, ac.signal);
-    history.push("/");
+    history.push("/dashboard")
   };
 
 }

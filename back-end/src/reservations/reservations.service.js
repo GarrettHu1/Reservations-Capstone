@@ -23,7 +23,7 @@ function updateStatus(resWithUpdatedStatus) {
     .select("*")
     .where({ reservation_id: resWithUpdatedStatus.reservation_id})
     .update(resWithUpdatedStatus, "*")
-}
+};
 
 module.exports = {
     list,
