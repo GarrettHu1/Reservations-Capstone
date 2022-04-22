@@ -60,7 +60,7 @@ async function update(req, res, next) {
     
     const { reservation_id } = req.body.data;
     const { tableId } = req.params;
-    console.log("values:", values);
+    // console.log("values:", values);
     // console.log("tableId:", tableId);
     // console.log("reservation_id", reservation_id)
 

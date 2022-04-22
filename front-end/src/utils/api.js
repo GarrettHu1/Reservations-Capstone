@@ -164,3 +164,21 @@ export async function deleteRes(table_id, signal) {
     throw err;
   }
 };
+
+// functino to update status of reservation being seated from "booked" to "seated"
+export async function seatReservation(reservation_id, signal) {
+    const url = `${API_BASE_URL}/reservations/${reservation_id}/seat`;
+    const options = {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({data: reservation_id}),
+      signal
+    };
+    try {
+      const response = await fetch(url, options);
+      const {data} = await response.json();
+      return data;
+    } catch (err) {
+      throw err;
+    }
+}

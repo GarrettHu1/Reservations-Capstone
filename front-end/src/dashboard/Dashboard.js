@@ -83,8 +83,8 @@ function Dashboard({ date }) {
     // make a del req to tables, remove reservation_id
     if (window.confirm("Is this table ready to seat new guests?")) {
     const ac = new AbortController();
-    await deleteRes(id, ac.signal);   
-    history.push(`/dashboard?date=${currentDay}`);
+    await deleteRes(id, ac.signal);
+    history.push("/")
     };
   };
 
@@ -132,7 +132,7 @@ function Dashboard({ date }) {
             <td>{reservation.reservation_date}</td>
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
-            <td></td>
+            <td>{reservation.status}</td>
             <td>
             <button className="btn btn-secondary" 
             onClick={()=> {

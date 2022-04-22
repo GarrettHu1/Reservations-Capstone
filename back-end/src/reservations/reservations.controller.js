@@ -151,6 +151,12 @@ async function read(req, res, next) {
   res.status(200).json({ data: data })
 }
 
+async function update(req, res, next) {
+  
+
+  res.status(200).json({ data: {} })
+}
+
 module.exports = {
   list,
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
