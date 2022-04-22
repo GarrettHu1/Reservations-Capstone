@@ -133,19 +133,16 @@ function Dashboard({ date }) {
             <td>{reservation.people}</td>
             <td>{reservation.status}</td>
             <td>
+            {reservation.status === "booked" && 
             <button className="btn btn-secondary" 
             onClick={()=> {
               history.push(`/reservations/${reservation.reservation_id}/seat`);
-              }}>
+            }}>
             Seat
-            </button>
-            <button className="btn btn-secondary" >
-            Edit
-            </button>
-            <button className="btn btn-secondary" >
-            Cancel
-            </button>
+            </button>}
             </td>
+            <td><button className="btn btn-secondary" >Edit</button></td>
+            <td><button className="btn btn-secondary" >Cancel</button></td>            
             </tr>
           ))}
         </tbody>
