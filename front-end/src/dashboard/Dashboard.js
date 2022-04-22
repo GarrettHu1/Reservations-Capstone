@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import { listReservations, listTables, deleteRes } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { previous, today, next } from "../utils/date-time"
-import Seat from "../tables/Seat"
 
 /**
  * Defines the dashboard page.

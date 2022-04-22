@@ -18,8 +18,16 @@ function read(reservationId) {
     .first()
 };
 
+function updateStatus(resWithUpdatedStatus) {
+    return knex("reservations")
+    .select("*")
+    .where({ reservation_id: resWithUpdatedStatus.reservation_id})
+    .update(resWithUpdatedStatus, "*")
+}
+
 module.exports = {
     list,
     create,
-    read
+    read,
+    updateStatus
 };

@@ -3,7 +3,7 @@ import {
     useParams,
     useHistory
   } from "react-router-dom";
-import { listTables, updateTable, listReservations } from "../utils/api";
+import { listTables, updateTable, listReservations, seatReservation } from "../utils/api";
 import { today } from "../utils/date-time";
 
 
@@ -37,6 +37,7 @@ export default function Seat() {
       return () => abortController.abort();
     };
   if (tablesError) console.log(tablesError);
+  if (resError) console.log(resError);
 
   // when reservations is updated, sets resToBeSeated to the reservation with matching reservation_id from params
   useEffect(()=> {
@@ -45,7 +46,7 @@ export default function Seat() {
     setResToBeSeated(found);
   }, [reservations]);
 
-async function handleSubmit(table) {
+async function handleSeat(table) {
     // take resId from params,
     // make put req to "tables" table, at url/${id}/seat with reservation_id: resId
     // console.log("Table Id:", table.table_id, "Reservation Id:", reservation_id)
@@ -76,11 +77,12 @@ async function handleSubmit(table) {
     // sets seatErrors to errors from submitting
     setSeatErrors(handleSubErrors);
 
-    // if no errors, sends put request to update reservation_id col in table
+    // if no errors, sends put request to update reservation_id col in table, and put to update status to seated
     if (handleSubErrors.length === 0) {
     const ac = new AbortController();
-
-    await updateTable(values, ac.signal);
+    console.log(reservation_id)
+    seatReservation(reservation_id, ac.signal);
+    updateTable(values, ac.signal);
     history.push("/");
   };
 
@@ -93,7 +95,7 @@ const handleCancel = (event) => {
   };
 
   // filters tables that have a reservation seated
-  const filteredTables = tables.filter((table) => table.reservation_id == null);
+  // const filteredTables = tables.filter((table) => table.reservation_id == null);
 
     return (
         <div>
@@ -113,7 +115,7 @@ const handleCancel = (event) => {
             {tables.map((table, index) => (
             <div className="tabledivs">
             Table: {table.table_name} Capacity: {table.capacity}
-            <button type="submit" onClick={() => handleSubmit(table)} className="btn btn-primary">Seat</button>  
+            <button type="submit" onClick={() => handleSeat(table)} className="btn btn-primary">Seat</button>  
             </div>              
           ))}
           <button onClick={handleCancel} className="btn btn-secondary">Cancel</button>
