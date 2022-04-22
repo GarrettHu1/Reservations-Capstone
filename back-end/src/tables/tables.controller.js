@@ -50,7 +50,7 @@ async function create(req, res, next) {
 };
 
 async function update(req, res, next) {
-    // obj containing id of reservation being seated, and of table 
+    // obj containing id of reservation being seated, and of table , and reservations arr
     // const values = {
     //     ...req.body.data
     // };

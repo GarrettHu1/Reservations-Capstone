@@ -79,12 +79,16 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${currentDay}`);
   };
 
+  async function handleFinish(res) {
+    // make a del req to tables, remove reservation_id
+  };
+
 
   return (
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">{`Reservations for ${currentDay}`}</h4>
         <div className="btn-group" role="group" aria-label="navigation buttons">
         <button className="btn btn-secondary" onClick={(goBack)}>
         <span className="oi oi-chevron-left"></span>
@@ -101,8 +105,6 @@ function Dashboard({ date }) {
       </div>
 
       <ErrorAlert error={reservationsError} />
-
-      <div>{currentDay}</div>
       
       <table>
         <thead>
@@ -113,6 +115,7 @@ function Dashboard({ date }) {
             <th>Date</th>
             <th>Time</th>
             <th>People</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -124,6 +127,7 @@ function Dashboard({ date }) {
             <td>{reservation.reservation_date}</td>
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
+            <td></td>
             <td>
             <button className="btn btn-secondary" 
             onClick={()=> {
@@ -131,6 +135,12 @@ function Dashboard({ date }) {
               history.push(`/reservations/${reservation.reservation_id}/seat`);
               }}>
             Seat
+            </button>
+            <button className="btn btn-secondary" >
+            Edit
+            </button>
+            <button className="btn btn-secondary" >
+            Cancel
             </button>
             </td>
             </tr>
@@ -153,7 +163,10 @@ function Dashboard({ date }) {
             <td>{index}</td>
             <td>{`${table.table_name}`}</td>
             <td>{table.capacity}</td>
-            <td>{`${table.reservation_id ? "Occupied" : "Free"}`}</td>         
+            <td>{`${table.reservation_id ? "Occupied" : "Free"}`}</td>        
+            <td>{ table.reservation_id && 
+            <button className="btn btn-secondary" onClick={() => handleFinish }>Finish</button> }
+            </td>
             </tr>
           ))}
         </tbody>

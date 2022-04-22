@@ -146,4 +146,21 @@ export async function request(url, options) {
   } catch (error) {
     throw error;
   }
-}
+};
+
+export async function deleteRes(id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({data: ids}),
+    signal
+  };
+  try {
+    const response = await fetch(url, options);
+    const {data} = await response.json();
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
