@@ -40,7 +40,7 @@ async function list(req, res) {
     }
   });
 
-  // if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
+  if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
 
   const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
 
@@ -142,23 +142,49 @@ async function create(req, res, next) {
   res.status(201).json({ data: data })
 };
 
-async function read(req, res, next) {
+async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
-  // console.log("Res Id:", reservationId);
-
   const data = await service.read(reservationId);
+
+  if (data) {
+    console.log("reservationExists, Found reservation:", data)
+    res.locals.reservation = data;
+    return next();
+  } else {
+    return next({ status: 404, message: `Reservation with reservation_id: ${reservationId} does not exist`})
+  }
+}
+
+async function read(req, res, next) {
+  // const { reservationId } = req.params;
+  // // console.log("Res Id:", reservationId);
+
+  // const data = await service.read(reservationId);
+
+  const data = res.locals.reservation;
 
   res.status(200).json({ data: data })
 }
 
-async function update(req, res, next) {
-  
+// function to update a reservations status from "booked" to "seated"
+async function updateStatus(req, res, next) {
+  // const { reservationId } = req.params;
 
-  res.status(200).json({ data: {} })
+  console.log("updateStatus, Reservation to update:", res.locals.reservation)
+
+  const resWithUpdatedStatus = {
+    ...res.locals.reservation,
+    status: "seated"
+  };
+
+  const data = await service.updateStatus(resWithUpdatedStatus);
+  console.log("updateStatus, updated seated reservation", data)
+  res.status(200).json({ data: data })
 }
 
 module.exports = {
   list,
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
-  read
+  read: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read) ],
+  updateStatus: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus) ]
 };
