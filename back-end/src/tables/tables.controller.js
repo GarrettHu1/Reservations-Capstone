@@ -83,14 +83,23 @@ async function update(req, res, next) {
     res.status(201).json({ data: newTable });
 };
 
-// async function update(req, res, next) {
+async function destroy(req, res, next) {
+    // receives table_id, then removes/replaces res_id with null
+    const { tableId } = req.params;
 
-//     res.status(201).json({ data: {} })
-// }
+    const tableFromId = await service.read(values.table_id);
+    const updatedTable = {
+        ...tableFromId,
+        reservation_id: null
+    }
+    await service.delete(updatedTable)
+    res.status(204)
+}
 
 module.exports = {
     list,
     create: [ asyncErrorBoundary(hasReqTableProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
-    update: [ asyncErrorBoundary(update) ]
+    update: [ asyncErrorBoundary(update) ],
+    delete: [ destroy ]
   };
   
