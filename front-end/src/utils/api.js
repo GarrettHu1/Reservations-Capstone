@@ -110,6 +110,7 @@ export async function listTables(signal) {
   return await fetchJson(url, options)
 };
 
+// function to find a reservation using its id
 export async function readReservation(reservation_id, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation_id}`
 
@@ -117,6 +118,7 @@ export async function readReservation(reservation_id, signal) {
   return await fetchJson(url, {headers, signal}, {});
 };
 
+// function to insert reservation_id into table to "seat" a reservation
 export async function updateTable(ids, signal) {
   const { table_id } = ids;
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
@@ -148,6 +150,7 @@ export async function request(url, options) {
   }
 };
 
+// function to remove reservation_id from table
 export async function deleteRes(table_id, signal) {
   const url = `${API_BASE_URL}/tables/${table_id}/seat`;
   const options = {
