@@ -80,9 +80,9 @@ return (
         <form>
         <label>
             Mobile Number:
-            <input type="text" name="mobile_number" onChange={handleChange} placeholder={"Mobile Number"} />
+            <input type="text" name="mobile_number" onChange={handleChange} placeholder={"Enter the customer's mobile number"} />
         </label>
-        <button type="submit" onClick={handleSubmit} className="btn btn-primary">Search</button>
+        <button type="submit" onClick={handleSubmit} className="btn btn-primary">Find</button>
         </form>
         
     <table>
@@ -107,11 +107,7 @@ return (
             <td>{reservation.reservation_date}</td>
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
-            <td>{reservation.status}</td>
-            <td>
-            </td>
-            <td><button className="btn btn-secondary" >Edit</button></td>
-            <td><button className="btn btn-secondary" >Cancel</button></td>            
+            <td>{reservation.status}</td>   
             </tr>
           )) 
           : foundRes ?
@@ -123,14 +119,10 @@ return (
             <td>{reservation.reservation_date}</td>
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
-            <td>{reservation.status}</td>
-            <td>
-            </td>
-            <td><button className="btn btn-secondary" >Edit</button></td>
-            <td><button className="btn btn-secondary" >Cancel</button></td>            
+            <td>{reservation.status}</td>       
             </tr>
           ))
-        : "No Reservations Found"}
+        : "No reservations found"}
         </tbody>
       </table>
 
