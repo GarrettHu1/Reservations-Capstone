@@ -21,6 +21,8 @@ export default function Search() {
         .catch(setReservationsErrors)
       }, []);    
 
+      if(reservationsErrors) console.log(reservationsErrors);
+
     const handleChange = ({ target }) => {
         setFormData({
           ...formData,
@@ -61,10 +63,6 @@ export default function Search() {
         // if valid, make api call
     };
 
-    // form, on submit calls handle search
-    // make get api call to /reservations
-    // filter through all, if reservation.mobile_number !== mobile_number from search return no reservations found
-    // if reservation, table with data filled with res details
 
     /*
     <div><h2>Search Reservations</h2></div>

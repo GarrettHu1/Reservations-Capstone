@@ -147,7 +147,7 @@ async function reservationExists(req, res, next) {
   const data = await service.read(reservationId);
 
   if (data) {
-    console.log("reservationExists, Found reservation:", data)
+    // console.log("Found reservation:", data)
     res.locals.reservation = data;
     return next();
   } else {
@@ -170,7 +170,7 @@ async function read(req, res, next) {
 async function updateStatus(req, res, next) {
   // const { reservationId } = req.params;
 
-  console.log("updateStatus, Reservation to update:", res.locals.reservation)
+  // console.log("updateStatus, Reservation to update:", res.locals.reservation)
   const resWithUpdatedStatus = res.locals.reservation;
 
   // if status is booked, set new res status to seated. else set to finished
@@ -180,17 +180,31 @@ async function updateStatus(req, res, next) {
     resWithUpdatedStatus.status = "seated"
   }
 
-  console.log("resWithUpdatedStatus", resWithUpdatedStatus)
+  // console.log("resWithUpdatedStatus", resWithUpdatedStatus)
 
   const data = await service.updateStatus(resWithUpdatedStatus);
   console.log("updateStatus, updated seated reservation", data)
   res.status(200).json({ data: data })
-}
+};
+
+async function editReservation(req, res, next) {
+  const currentReservation = res.locals.reservation;
+  const newRes = {
+    ...req.body.data,
+    reservation_id: currentReservation.reservation_id
+  };
+
+  console.log("New reservation data:", newRes)
+  // const data = await service.editReservation(newRes);
+
+  res.status(201).json({ data: {} })
+};
 
 module.exports = {
   list,
   listAll,
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
   read: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read) ],
-  updateStatus: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus) ]
+  updateStatus: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus) ],
+  editReservation: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(editReservation) ]
 };

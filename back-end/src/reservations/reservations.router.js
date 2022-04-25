@@ -29,5 +29,10 @@ router
   .route("/:reservationId/status")
   .put(controller.updateStatus)
   .all(methodNotAllowed);
+
+  router
+  .route("/:reservationId/edit")
+  .put(controller.editReservation)
+  .all(methodNotAllowed);
   
 module.exports = router;

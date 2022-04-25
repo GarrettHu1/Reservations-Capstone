@@ -25,9 +25,17 @@ function updateStatus(resWithUpdatedStatus) {
     .update(resWithUpdatedStatus, "*")
 };
 
+function editReservation(newRes) {
+    return knex("reservations")
+    .select("*")
+    .where({ reservation_id: newRes.reservation_id})
+    .update(newRes, "*")
+};
+
 module.exports = {
     list,
     create,
     read,
-    updateStatus
+    updateStatus,
+    editReservation
 };
