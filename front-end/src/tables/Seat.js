@@ -81,9 +81,11 @@ async function handleSeat(table) {
     if (handleSubErrors.length === 0) {
     const ac = new AbortController();
     console.log(reservation_id)
-    updateReservationStatus(reservation_id, ac.signal);
+    const data = {reservation_id: reservation_id}
+    updateReservationStatus(data, ac.signal);
     updateTable(values, ac.signal);
-    history.push("/dashboard")
+    history.push("/dashboard");
+    window.location.reload();
   };
 
 }

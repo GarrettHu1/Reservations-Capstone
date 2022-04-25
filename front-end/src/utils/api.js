@@ -181,12 +181,13 @@ export async function deleteRes(table_id, signal) {
 };
 
 // functino to update status of reservation being seated from "booked" to "seated"
-export async function updateReservationStatus(reservation_id, signal) {
+export async function updateReservationStatus(data, signal) {
+    const { reservation_id } = data;
     const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
     const options = {
       method: "PUT",
       headers,
-      body: JSON.stringify({data: reservation_id}),
+      body: JSON.stringify({data: data}),
       signal
     };
     try {
@@ -214,3 +215,4 @@ export async function editReservation(reservation, signal) {
     throw err;
   }
 };
+

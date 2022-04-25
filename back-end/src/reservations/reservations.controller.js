@@ -40,7 +40,7 @@ async function list(req, res) {
     }
   });
 
-  if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
+  // if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
 
   const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
 
@@ -144,6 +144,7 @@ async function create(req, res, next) {
 
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
+  console.log("resId", reservationId)
   const data = await service.read(reservationId);
 
   if (data) {
@@ -168,19 +169,21 @@ async function read(req, res, next) {
 
 // function to update a reservations status from "booked" to "seated"
 async function updateStatus(req, res, next) {
-  // const { reservationId } = req.params;
-
-  // console.log("updateStatus, Reservation to update:", res.locals.reservation)
   const resWithUpdatedStatus = res.locals.reservation;
-
+  console.log("reservation to edit:", resWithUpdatedStatus)
+  console.log("req.body:", req.body.data.status);
+  if (req.body.data.status === "cancelled") {
+    // console.log("req.body", req.body.data.status);
+    resWithUpdatedStatus.status = "cancelled"
+  }
   // if status is booked, set new res status to seated. else set to finished
-  if (resWithUpdatedStatus.status === "seated") {
+  else if (resWithUpdatedStatus.status === "seated") {
     resWithUpdatedStatus.status = "finished"
   } else {
     resWithUpdatedStatus.status = "seated"
   }
 
-  // console.log("resWithUpdatedStatus", resWithUpdatedStatus)
+  console.log("newResWithUpdatedStatus", resWithUpdatedStatus)
 
   const data = await service.updateStatus(resWithUpdatedStatus);
   console.log("updateStatus, updated seated reservation", data)

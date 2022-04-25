@@ -78,14 +78,24 @@ function Dashboard({ date }) {
     history.push(`/dashboard?date=${currentDay}`);
   };
 
+  async function handleCancel(resId) {
+    if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
+      const ac = new AbortController();
+      const reqData = { reservation_id: resId, status: "cancelled" };
+      updateReservationStatus(reqData, ac.signal);
+      window.location.reload();
+    }; 
+  };
+
   async function handleFinish(tableId, resId) {
     // make a del req to tables, remove reservation_id
     if (window.confirm("Is this table ready to seat new guests?")) {
     const ac = new AbortController();
     deleteRes(tableId, ac.signal);
     console.log("handleFinish:", resId)
-    updateReservationStatus(resId, ac.signal);
-    history.push("/")
+    const data = { reservation_id: resId}
+    updateReservationStatus(data, ac.signal);
+    window.location.reload();
     };
   };
 
@@ -151,7 +161,8 @@ function Dashboard({ date }) {
             }}>
             Edit
             </button></td>
-            <td><button className="btn btn-secondary" >Cancel</button></td>            
+            <td><button className="btn btn-secondary" reservation-id-cancel={reservation.reservation_id} 
+            onClick={() => handleCancel(reservation.reservation_id) }>Cancel</button></td>            
             </tr>
           )) : "No Reservations Found"}
         </tbody>
