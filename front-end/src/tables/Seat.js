@@ -81,7 +81,7 @@ async function handleSeat(table) {
     if (handleSubErrors.length === 0) {
     const ac = new AbortController();
     console.log(reservation_id)
-    const data = {reservation_id: reservation_id}
+    const data = {reservation_id: reservation_id, status: "seated"}
     updateReservationStatus(data, ac.signal);
     updateTable(values, ac.signal);
     history.push("/dashboard");

@@ -46,6 +46,9 @@ async function create(req, res, next) {
     const newTable = {
         ...req.body.data
     };
+    if (!newTable.table_name) {
+        return next({ status:400, message: "table_name is missing"})
+    }
     // console.log("newTable:", newTable)
     const data = await service.create(newTable);
     res.status(201).json({ data: data });

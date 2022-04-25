@@ -176,11 +176,11 @@ async function read(req, res, next) {
 
 // function to update a reservations status from "booked" to "seated"
 async function updateStatus(req, res, next) {
-  const resWithUpdatedStatus = res.locals.reservation;
+  const resToUpdate = res.locals.reservation;
   // console.log("reservation to edit:", resWithUpdatedStatus)
   // console.log("req.body:", req.body.data.status);
 
-  if (resWithUpdatedStatus.status === "finished") {
+  if (resToUpdate.status === "finished") {
     return next({ status: 400, message: `A finished reservation cannot be updated` });
   };
 
@@ -189,9 +189,9 @@ async function updateStatus(req, res, next) {
     return next({ status: 400, message: `Reservation status: ${reqStatus} is not valid` });
   };
 
-  if (reqStatus === "finished") {
-    return next({ status: 400, message: `Reservation status: ${reqStatus} is not valid` });
-  };
+  // if (reqStatus === "finished") {
+  //   return next({ status: 400, message: `Reservation status: ${reqStatus} is not valid` });
+  // };
 
   // if (req.body.data.status === "cancelled") {
   //   // console.log("req.body", req.body.data.status);
@@ -204,11 +204,11 @@ async function updateStatus(req, res, next) {
   //   resWithUpdatedStatus.status = req.body.data.status
   // };
 
-  resWithUpdatedStatus.status = req.body.data.status
+  resToUpdate.status = req.body.data.status
 
   // console.log("newResWithUpdatedStatus", resWithUpdatedStatus)
 
-  const data = await service.updateStatus(resWithUpdatedStatus);
+  const data = await service.updateStatus(resToUpdate);
   // console.log("updateStatus, updated seated reservation", data)
   res.status(200).json({ data: data });
 };
