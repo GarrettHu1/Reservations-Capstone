@@ -197,3 +197,20 @@ export async function updateReservationStatus(reservation_id, signal) {
       throw err;
     }
 };
+
+export async function editReservation(reservation, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}/edit`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: reservation}),
+    signal
+  };
+  try {
+    const response = await fetch(url, options);
+    const {data} = await response.json();
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
