@@ -2,38 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { listReservations, editReservation } from "../utils/api";
 import { today } from "../utils/date-time";
+import ResForm from "./ResForm";
 
 export default function EditRes() {
 
-const initialFormState = {
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: "",
-    status: "booked"
-};
-
-const [ formData, setFormData ] = useState({ ...initialFormState });
 const [ errors, setErrors ] = useState([]);
 const history = useHistory();
 const resId  = useParams();
 
 const [ reservation, setReservation ] = useState([]);
 const [ reservationsError, setReservationsError ] = useState(null);
-const [ currentDay, setCurrentDay ] = useState(today());
+
+const initialFormState = {
+    first_name: reservation.first_name,
+    last_name: reservation.last_name,
+    mobile_number: reservation.mobile_number,
+    reservation_date: reservation.reservation_date,
+    reservation_time: reservation.reservation_time,
+    people: reservation.people,
+    status: reservation.status
+};
+// console.log("initialFormState:", initialFormState)
+
+const [ formData, setFormData ] = useState({ ...initialFormState });
 
   // load all reservations on initial page load, then finds single reservation to edit
-  useEffect(loadDashboard, [currentDay]);
+  useEffect(loadDashboard, []);
 
   async function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations(currentDay, abortController.signal)
+    listReservations(today(), abortController.signal)
       .then((reservations)=> {
           const foundRes = reservations.find((reservation) => reservation.reservation_id === Number(resId.reservation_id))
           setReservation(foundRes)
+          setFormData(foundRes)
       })
       .catch(setReservationsError);
     return () => abortController.abort();
@@ -59,6 +62,7 @@ const handleChange = ({ target }) => {
 
 const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("formData", formData)
 
     setErrors([]);
 
@@ -72,9 +76,10 @@ const handleSubmit = async (event) => {
     let f = formData.people;
 
     if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){
+        console.log(formData)
         window.alert('Please fill in all values')
     } else {
-
+        console.log(formData)
     // res date values
     const resDate = new Date(d);
     const resMonth = Number(d.slice(5, 7));
@@ -115,7 +120,7 @@ const handleSubmit = async (event) => {
     }
     
     // if res date/time is in the past, push dateTimeError
-    console.log(resHour, resMin)
+    // console.log(resHour, resMin)
     if (
         resYear < year 
         || (resMonth === mes && resDay < dia) 
@@ -143,12 +148,10 @@ const handleSubmit = async (event) => {
         await editReservation(formData, ac.signal);
         // returns user to dashboard
         history.push(`/dashboard?date=${d}`);
-        // clears form 
-        // setFormData(initialFormState); 
     }
 
     }
-}
+};
 
   const handleCancel = (event) => {
     event.preventDefault();
@@ -156,39 +159,42 @@ const handleSubmit = async (event) => {
     history.goBack();
   };
 
+//   <ResForm handleCancel={handleCancel} handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} />
+
+
     return (
         <main>
-            <h1>Create Reservation</h1>
+            <h1>Edit Reservation</h1>
             {errors.length > 0 &&
             <div className="alert alert-danger" role="alert" >
                 Please fix the following errors:
                 {errors.map((error)=> <li>{error}</li>)}
             </div>
             }
-            <form>
+        <form>
         <label>
             First Name:
-            <input type="text" name="first_name" onChange={handleChange} value={reservation.first_name} />
+            <input type="text" name="first_name" onChange={handleChange} defaultValue={reservation.first_name} />
         </label>
         <label>
             Last Name:
-            <input type="text" name="last_name" onChange={handleChange} value={reservation.last_name} />
+            <input type="text" name="last_name" onChange={handleChange} defaultValue={reservation.last_name} />
         </label>
         <label>
             Mobile Number:
-            <input type="text" name="mobile_number" onChange={handleChange} value={reservation.mobile_number} />
+            <input type="text" name="mobile_number" onChange={handleChange} defaultValue={reservation.mobile_number} />
         </label>
         <label>
             Date of reservation:
-            <input type="date" name="reservation_date" onChange={handleChange} value={reservation.reservation_date} />
+            <input type="date" name="reservation_date" onChange={handleChange} defaultValue={reservation.reservation_date} />
         </label>
         <label>
             Time of reservation:
-            <input type="time" name="reservation_time" onChange={handleChange} value={reservation.reservation_time} />
+            <input type="time" name="reservation_time" onChange={handleChange} defaultValue={reservation.reservation_time} />
         </label>
         <label>
             Number of people in the party:
-            <input type="number" name="people" onChange={handleChange} value={reservation.people} />
+            <input type="number" name="people" onChange={handleChange} defaultValue={reservation.people} />
         </label>
         <button type="submit" onClick={handleSubmit} className="btn btn-primary">Submit</button>
         <button onClick={handleCancel} className="btn btn-danger">Cancel</button>

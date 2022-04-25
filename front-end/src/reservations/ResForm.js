@@ -5,7 +5,7 @@ export default function ResForm({ handleChange, handleSubmit, handleCancel, rese
         <form>
         <label>
         First Name:
-        <input type="text" name="first_name" onChange={handleChange} value={reservation.first_name} />
+        <input type="text" name="first_name" value={reservation.first_name} onChange={handleChange} />
         </label>
         <label>
         Last Name:

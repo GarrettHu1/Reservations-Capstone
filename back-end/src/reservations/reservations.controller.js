@@ -195,9 +195,9 @@ async function editReservation(req, res, next) {
   };
 
   console.log("New reservation data:", newRes)
-  // const data = await service.editReservation(newRes);
+  const data = await service.editReservation(newRes);
 
-  res.status(201).json({ data: {} })
+  res.status(201).json({ data: data })
 };
 
 module.exports = {
