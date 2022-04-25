@@ -15,6 +15,10 @@ function asDateString(date) {
  */
 async function list(req, res) {
   let dateFromQuery = req.query;
+
+  // if req.query === "mobile_number"
+
+
   // backup, defaults dateFromQuery to today,
   if (!dateFromQuery) {
     dateFromQuery = today();
@@ -43,8 +47,8 @@ async function list(req, res) {
   // if (resForCurrentDate) {console.log(`resForCurrentDate`, resForCurrentDate)}
 
   const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
-
-  res.json({data: sortedReservations});
+  const filteredSortedReservations = sortedReservations.filter((reservation) => reservation.status !== "finished")
+  res.json({data: filteredSortedReservations});
 };
 
 async function listAll(req, res) {
@@ -173,24 +177,40 @@ async function read(req, res, next) {
 // function to update a reservations status from "booked" to "seated"
 async function updateStatus(req, res, next) {
   const resWithUpdatedStatus = res.locals.reservation;
-  console.log("reservation to edit:", resWithUpdatedStatus)
-  console.log("req.body:", req.body.data.status);
-  if (req.body.data.status === "cancelled") {
-    // console.log("req.body", req.body.data.status);
-    resWithUpdatedStatus.status = "cancelled"
-  }
-  // if status is booked, set new res status to seated. else set to finished
-  else if (resWithUpdatedStatus.status === "seated") {
-    resWithUpdatedStatus.status = "finished"
-  } else {
-    resWithUpdatedStatus.status = "seated"
-  }
+  // console.log("reservation to edit:", resWithUpdatedStatus)
+  // console.log("req.body:", req.body.data.status);
 
-  console.log("newResWithUpdatedStatus", resWithUpdatedStatus)
+  if (resWithUpdatedStatus.status === "finished") {
+    return next({ status: 400, message: `A finished reservation cannot be updated` });
+  };
+
+  const reqStatus = req.body.data.status;
+  if (reqStatus !== "booked" && reqStatus !== "seated" && reqStatus !== "finished") {
+    return next({ status: 400, message: `Reservation status: ${reqStatus} is not valid` });
+  };
+
+  if (reqStatus === "finished") {
+    return next({ status: 400, message: `Reservation status: ${reqStatus} is not valid` });
+  };
+
+  // if (req.body.data.status === "cancelled") {
+  //   // console.log("req.body", req.body.data.status);
+  //   resWithUpdatedStatus.status = "cancelled"
+  // }
+  // // if status is booked, set new res status to seated. else set to finished
+  // else if (resWithUpdatedStatus.status === "seated") {
+  //   resWithUpdatedStatus.status = "finished"
+  // } else {
+  //   resWithUpdatedStatus.status = req.body.data.status
+  // };
+
+  resWithUpdatedStatus.status = req.body.data.status
+
+  // console.log("newResWithUpdatedStatus", resWithUpdatedStatus)
 
   const data = await service.updateStatus(resWithUpdatedStatus);
-  console.log("updateStatus, updated seated reservation", data)
-  res.status(201).json({ data: data })
+  // console.log("updateStatus, updated seated reservation", data)
+  res.status(200).json({ data: data });
 };
 
 async function editReservation(req, res, next) {

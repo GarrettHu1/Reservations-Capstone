@@ -70,6 +70,10 @@ async function update(req, res, next) {
     const tableFromId = await service.read(values.table_id);
     // console.log("tableFromId:", tableFromId);
 
+    // if (tableFromId.reservation_id) {
+    //     return next({ status: 200, message: `Table: ${tableFromId.table_name} is occupied with reservation: ${reservation_id}`});  
+    // }
+
     // new table containing resId of res boing seated
     const updatedTable = {
         ...tableFromId,
@@ -100,7 +104,7 @@ async function destroy(req, res, next) {
         reservation_id: null
     }
     await service.delete(updatedTable);
-    res.sendStatus(200);
+    res.status(200).json({ data: updatedTable });
 }
 
 module.exports = {

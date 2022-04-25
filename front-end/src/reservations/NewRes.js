@@ -93,7 +93,7 @@ const handleSubmit = async (event) => {
     if (
         resYear < year 
         || (resMonth === mes && resDay < dia) 
-        || resMonth < mes 
+        || (resYear === year && resMonth < mes) 
         || (resDay === dia && resMonth === mes && resYear === year && hours > resHour )
         ) {
         // setErrors( ...errors, dateError)

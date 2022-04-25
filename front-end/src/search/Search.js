@@ -49,10 +49,20 @@ export default function Search() {
         // prints true / false if formatted mobile number is a valid number or not
         console.log("Format function:", phonenumber(formattedNum));
 
-        if (phonenumber(formattedNum) === true) {
+        if (formattedNum.length > 0) {
             console.log("Mobile Number Is Valid");
-            const foundReservation = reservations.filter((reservation) => Number(reservation.mobile_number.replace(/[^A-Z0-9]/ig, "")) === Number(formattedNum));
-            console.log(foundReservation);
+            const foundReservation = reservations.filter((reservation) => {
+              console.log(reservation.mobile_number.replace(/[^A-Z0-9]/ig, ""))
+              console.log(formattedNum)
+              const arrayFromNumber = Array.from(reservation.mobile_number.replace(/[^A-Z0-9]/ig, ""));
+              console.log(arrayFromNumber)
+              if (arrayFromNumber.includes(formattedNum)) {
+                   return reservation
+              }
+              return Number(reservation.mobile_number.replace(/[^A-Z0-9]/ig, "")) === Number(formattedNum)
+            });
+
+            console.log("foundReservation", foundReservation);
             setFoundRes(foundReservation);
         } else {
             setShowRes(true);
