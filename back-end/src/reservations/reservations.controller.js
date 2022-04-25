@@ -232,5 +232,6 @@ module.exports = {
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
   read: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read) ],
   updateStatus: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus) ],
-  editReservation: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(editReservation) ]
+  editReservation: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(editReservation) ],
+  reservationExists
 };

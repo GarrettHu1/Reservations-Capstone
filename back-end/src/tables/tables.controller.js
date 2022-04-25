@@ -2,6 +2,8 @@ const service = require("./tables.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 const reservationsController = require("../reservations/reservations.controller");
+const reservationsService = require("../reservations/reservations.service");
+// const reservationExists = require("../reservations/reservations.controller");
 
 async function list(req, res) {
     const data = await service.list();
@@ -49,30 +51,35 @@ async function create(req, res, next) {
     res.status(201).json({ data: data });
 };
 
+// async function reservationExists(req, res, next) {
+//     const { reservationId } = req.body.data;
+//     // console.log("resId", reservationId)
+//     const data = await reservationsService.read(reservationId);
+  
+//     if (data) {
+//       // console.log("Found reservation:", data)
+//       res.locals.reservation = data;
+//       return next();
+//     } else {
+//       return next({ status: 404, message: `Reservation with reservation_id: ${reservationId} does not exist`})
+//     }
+//   }
+
 async function update(req, res, next) {
     // obj containing id of reservation being seated, and of table , and reservations arr
-    // const values = {
-    //     ...req.body.data
-    // };
-
     // contains table_id, reservation_id, reservations
     const values = req.body.data;
+    console.log("Values:", values);
+    
+    if (!values) return next({ status: 400, message: "missing data"});
     
     const { reservation_id } = req.body.data;
     const { tableId } = req.params;
-    // console.log("values:", values);
-    // console.log("tableId:", tableId);
-    // console.log("reservation_id", reservation_id)
 
     // if reservation id undef or null => error
     if (!reservation_id) return next({ status: 400, message: `reservation_id missing, received: ${reservation_id}`});  
 
     const tableFromId = await service.read(values.table_id);
-    // console.log("tableFromId:", tableFromId);
-
-    // if (tableFromId.reservation_id) {
-    //     return next({ status: 200, message: `Table: ${tableFromId.table_name} is occupied with reservation: ${reservation_id}`});  
-    // }
 
     // new table containing resId of res boing seated
     const updatedTable = {
