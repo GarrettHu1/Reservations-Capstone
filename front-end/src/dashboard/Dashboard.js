@@ -145,7 +145,12 @@ function Dashboard({ date }) {
             Seat
             </button>}
             </td>
-            <td><button className="btn btn-secondary" >Edit</button></td>
+            <td><button className="btn btn-secondary" 
+            onClick={()=> {
+              history.push(`/reservations/${reservation.reservation_id}/edit`);
+            }}>
+            Edit
+            </button></td>
             <td><button className="btn btn-secondary" >Cancel</button></td>            
             </tr>
           )) : "No Reservations Found"}

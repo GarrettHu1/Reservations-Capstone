@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api"
-// import { today } from "../utils/date-time"
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router-dom";
+import { createReservation, listReservations } from "../utils/api";
+import { today } from "../utils/date-time";
 
 // route: /reservations/new
 
@@ -16,11 +16,52 @@ import { createReservation } from "../utils/api"
 
 
 
-export default function EditRes(reservation) {
+export default function EditRes() {
 
-const [ formData, setFormData ] = useState({ reservation });
+const initialFormState = {
+    first_name: "",
+    last_name: "",
+    mobile_number: "",
+    reservation_date: "",
+    reservation_time: "",
+    people: "",
+};
+
+const [ formData, setFormData ] = useState({ ...initialFormState });
 const [ errors, setErrors ] = useState([]);
 const history = useHistory();
+const resId  = useParams();
+
+const [ reservation, setReservation ] = useState([]);
+const [ reservationsError, setReservationsError ] = useState(null);
+const [ currentDay, setCurrentDay ] = useState(today());
+
+  // load all reservations on initial page load, then whenever currentDay is updated
+  useEffect(loadDashboard, [currentDay]);
+
+  async function loadDashboard() {
+    const abortController = new AbortController();
+    setReservationsError(null);
+    listReservations(currentDay, abortController.signal)
+      .then((reservations)=> {
+          const foundRes = reservations.find((reservation) => reservation.reservation_id === Number(resId.reservation_id))
+          setReservation(foundRes)
+      })
+      .catch(setReservationsError);
+    return () => abortController.abort();
+  };
+
+// const initialFormState = {
+//     first_name: reservation.first_name,
+//     last_name: reservation.last_name,
+//     mobile_number: reservation.mobile_number,
+//     reservation_date: reservation.reservation_date,
+//     reservation_time: reservation.reservation_time,
+//     people: reservation.people
+// };
+
+  console.log("Found reservation:",reservation)
+
 
 const handleChange = ({ target }) => {
     if (target.type === "number") {
@@ -131,7 +172,7 @@ const handleSubmit = async (event) => {
 
   const handleCancel = (event) => {
     event.preventDefault();
-    setFormData(initialFormState);
+    // setFormData(initialFormState);
     history.goBack();
   };
 
@@ -147,27 +188,27 @@ const handleSubmit = async (event) => {
             <form>
         <label>
             First Name:
-            <input type="text" name="first_name" onChange={handleChange} placeholder={"First Name"} />
+            <input type="text" name="first_name" onChange={handleChange} placeholder={reservation.first_name} />
         </label>
         <label>
             Last Name:
-            <input type="text" name="last_name" onChange={handleChange} placeholder={"Last Name"} />
+            <input type="text" name="last_name" onChange={handleChange} placeholder={reservation.last_name} />
         </label>
         <label>
             Mobile Number:
-            <input type="text" name="mobile_number" onChange={handleChange} placeholder={"Mobile Number"} />
+            <input type="text" name="mobile_number" onChange={handleChange} placeholder={reservation.mobile_number} />
         </label>
         <label>
             Date of reservation:
-            <input type="date" name="reservation_date" onChange={handleChange} />
+            <input type="date" name="reservation_date" onChange={handleChange} placeholder={reservation.reservation_date} />
         </label>
         <label>
             Time of reservation:
-            <input type="time" name="reservation_time" onChange={handleChange} />
+            <input type="time" name="reservation_time" onChange={handleChange} placeholder={reservation.reservation_time} />
         </label>
         <label>
             Number of people in the party:
-            <input type="number" name="people" onChange={handleChange} />
+            <input type="number" name="people" onChange={handleChange} placeholder={reservation.people} />
         </label>
         <button type="submit" onClick={handleSubmit} className="btn btn-primary">Submit</button>
         <button onClick={handleCancel} className="btn btn-danger">Cancel</button>
