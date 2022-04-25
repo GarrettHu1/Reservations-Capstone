@@ -116,7 +116,7 @@ function hasOnlyValidProperties(req, res, next) {
   if (
     resYear < year 
     || (resMonth === mes && resDay < dia) 
-    || resMonth < mes 
+    || (resYear === year && resMonth < mes )
     || (resDay === dia && resMonth === mes && resYear === year && hours > resTime ) ) {
       return next({ status: 400, message: `reservation_date must be in the future ${resDate}`})
     };
@@ -137,9 +137,12 @@ async function create(req, res, next) {
   const newReservation = {
     ...req.body.data
   };
-
+  console.log("New Reservation data:", newReservation)
+  if (newReservation.status === "seated" || newReservation.status === "finished") {
+    return next ({ status: 400, message: `Reservation status: ${newReservation.status} is invalid` })
+  };
   const data = await service.create(newReservation);
-  res.status(201).json({ data: data })
+    res.status(201).json({ data: data })
 };
 
 async function reservationExists(req, res, next) {
@@ -187,7 +190,7 @@ async function updateStatus(req, res, next) {
 
   const data = await service.updateStatus(resWithUpdatedStatus);
   console.log("updateStatus, updated seated reservation", data)
-  res.status(200).json({ data: data })
+  res.status(201).json({ data: data })
 };
 
 async function editReservation(req, res, next) {
@@ -200,7 +203,7 @@ async function editReservation(req, res, next) {
   console.log("New reservation data:", newRes)
   const data = await service.editReservation(newRes);
 
-  res.status(201).json({ data: data })
+  res.status(201).json({ data: data.status })
 };
 
 module.exports = {
