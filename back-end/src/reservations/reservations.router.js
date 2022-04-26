@@ -19,15 +19,14 @@ router
 .get(controller.listAll)
 .all(methodNotAllowed);
 
+router
+  .route("/:reservationId/status")
+  .put(controller.updateStatus)
+  .all(methodNotAllowed);
 
 router
   .route("/:reservationId")
   .get(controller.read)
-  .all(methodNotAllowed);
-
-router
-  .route("/:reservationId/status")
-  .put(controller.updateStatus)
   .all(methodNotAllowed);
 
   router

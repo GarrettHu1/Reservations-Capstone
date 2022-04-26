@@ -54,19 +54,19 @@ async function create(req, res, next) {
     res.status(201).json({ data: data });
 };
 
-// async function reservationExists(req, res, next) {
-//     const { reservationId } = req.body.data;
-//     // console.log("resId", reservationId)
-//     const data = await reservationsService.read(reservationId);
+async function reservationExists(req, res, next) {
+    const { reservationId } = req.body.data;
+    // console.log("resId", reservationId)
+    const data = await reservationsService.read(reservationId);
   
-//     if (data) {
-//       // console.log("Found reservation:", data)
-//       res.locals.reservation = data;
-//       return next();
-//     } else {
-//       return next({ status: 404, message: `Reservation with reservation_id: ${reservationId} does not exist`})
-//     }
-//   }
+    if (data) {
+      // console.log("Found reservation:", data)
+      res.locals.reservation = data;
+      return next();
+    } else {
+      return next({ status: 404, message: `Reservation with reservation_id: ${reservationId} does not exist`})
+    }
+  }
 
 async function update(req, res, next) {
     // obj containing id of reservation being seated, and of table , and reservations arr
@@ -81,8 +81,20 @@ async function update(req, res, next) {
 
     // if reservation id undef or null => error
     if (!reservation_id) return next({ status: 400, message: `reservation_id missing, received: ${reservation_id}`});  
+    const data = await reservationsService.read(reservation_id);
+    if (!data) {
+        return next({ status: 404, message: `reservation not found, received: ${reservation_id}`})
+    }
+    console.log({values}, "------------")
+    const tableFromId = await service.read(tableId);
 
-    const tableFromId = await service.read(values.table_id);
+    if (Number(data.people) > Number(tableFromId.capacity)) {
+        return next({ status: 400, message: "table does not have sufficient capacity"});
+    };
+
+    if (tableFromId.reservation_id) {
+        return next({ status: 400, message: "table is occupied"});
+    };
 
     // new table containing resId of res boing seated
     const updatedTable = {
@@ -94,7 +106,7 @@ async function update(req, res, next) {
     const newTable = await service.update(updatedTable);
     // console.log("Updated table:", data);
 
-    res.status(201).json({ data: newTable });
+    res.status(200).json({ data: newTable });
 };
 
 async function destroy(req, res, next) {

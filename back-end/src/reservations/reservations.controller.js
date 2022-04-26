@@ -77,8 +77,15 @@ function dateIsValid(dateStr) {
 
 // validates input time follows HH-MM format
 function validateHhMm(inputField) {
+  console.log({inputField}, "----------");
   var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputField);
+  console.log({isValid}, "---------------");
   return isValid;
+};
+
+function validateResTime(inputTime) {
+  let hour = inputTime.split(":")[0].replace("0", "");
+  return hour < "22" && hour > "10"
 };
 
 function hasOnlyValidProperties(req, res, next) {
@@ -112,6 +119,8 @@ function hasOnlyValidProperties(req, res, next) {
   if (!dateIsValid(resDate)) return next({ status: 400, message: `${resDate} is not a valid input for reservation_date`})
   if (typeof(resPeople) !== "number") return next({ status: 400, message: `${resPeople} is not a valid input for people`})
   if (!validateHhMm(resTime)) return next({ status: 400, message: `${resTime} is not a valid input for reservation_time`})
+  if (!validateResTime(resTime)) return next({ status: 400, message: `${resTime} is not a valid input for reservation_time`})
+  
 
   // reservation date on tuesday validation
   if (dateValue === 1) return next({ status: 400, message: `Restaurant is closed on Tuesdays ${resDate}`})
@@ -125,6 +134,7 @@ function hasOnlyValidProperties(req, res, next) {
       return next({ status: 400, message: `reservation_date must be in the future ${resDate}`})
     };
 
+    
 
   next();
 };
@@ -138,20 +148,25 @@ const hasReqProps = hasProperties(
 "people");
 
 async function create(req, res, next) {
+  // console.log(req.body.data, "Req data -----------")
   const newReservation = {
-    ...req.body.data
+    ...req.body.data,
+    status: "booked"
   };
-  console.log("New Reservation data:", newReservation)
-  if (newReservation.status === "seated" || newReservation.status === "finished") {
-    return next ({ status: 400, message: `Reservation status: ${newReservation.status} is invalid` })
+
+  // console.log("New Reservation data:", newReservation)
+  if (req.body.data.status === "seated" || req.body.data.status === "finished") {
+    // console.log("--------------Inside status check--------------")
+    return next({ status: 400, message: `Reservation status: ${req.body.data.status} is invalid` })
   };
+
   const data = await service.create(newReservation);
     res.status(201).json({ data: data })
 };
 
 async function reservationExists(req, res, next) {
   const { reservationId } = req.params;
-  console.log("resId", reservationId)
+  // console.log("resId", reservationId)
   const data = await service.read(reservationId);
 
   if (data) {
@@ -176,6 +191,7 @@ async function read(req, res, next) {
 
 // function to update a reservations status from "booked" to "seated"
 async function updateStatus(req, res, next) {
+  console.log(req.body.data, "-------------")
   const resToUpdate = res.locals.reservation;
   // console.log("reservation to edit:", resWithUpdatedStatus)
   // console.log("req.body:", req.body.data.status);
@@ -185,26 +201,12 @@ async function updateStatus(req, res, next) {
   };
 
   const reqStatus = req.body.data.status;
-  if (reqStatus !== "booked" && reqStatus !== "seated" && reqStatus !== "finished") {
+  if (reqStatus !== "booked" && reqStatus !== "seated" && reqStatus !== "finished" && reqStatus !== "cancelled") {
     return next({ status: 400, message: `Reservation status: ${reqStatus} is not valid` });
   };
-
-  // if (reqStatus === "finished") {
-  //   return next({ status: 400, message: `Reservation status: ${reqStatus} is not valid` });
-  // };
-
-  // if (req.body.data.status === "cancelled") {
-  //   // console.log("req.body", req.body.data.status);
-  //   resWithUpdatedStatus.status = "cancelled"
-  // }
-  // // if status is booked, set new res status to seated. else set to finished
-  // else if (resWithUpdatedStatus.status === "seated") {
-  //   resWithUpdatedStatus.status = "finished"
-  // } else {
-  //   resWithUpdatedStatus.status = req.body.data.status
-  // };
-
-  resToUpdate.status = req.body.data.status
+  
+  resToUpdate.status = req.body.data.status;
+  console.log(resToUpdate, "res to update -------------");
 
   // console.log("newResWithUpdatedStatus", resWithUpdatedStatus)
 
