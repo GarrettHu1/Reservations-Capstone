@@ -72,7 +72,7 @@ async function update(req, res, next) {
     // obj containing id of reservation being seated, and of table , and reservations arr
     // contains table_id, reservation_id, reservations
     const values = req.body.data;
-    console.log("Values:", values);
+    // console.log("Values:", values);
     
     if (!values) return next({ status: 400, message: "missing data"});
     
@@ -88,7 +88,7 @@ async function update(req, res, next) {
     if (data.status === "seated") {
         return next({ status: 400, message: `reservation is already seated`})
     };
-    console.log({values}, "------------")
+    // console.log({values}, "------------")
     const tableFromId = await service.read(tableId);
 
     if (Number(data.people) > Number(tableFromId.capacity)) {
@@ -114,7 +114,7 @@ async function update(req, res, next) {
     await reservationsService.updateStatus(updated);
 
     const newTable = await service.update(updatedTable);
-    console.log("Updated table:", data);
+    // console.log("Updated table:", data);
 
     res.status(200).json({ data: newTable });
 };

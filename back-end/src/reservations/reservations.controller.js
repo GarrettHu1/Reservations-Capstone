@@ -15,10 +15,10 @@ function asDateString(date) {
  */
 async function list(req, res) {
   if (req.query.mobile_number) {
-    console.log("query is a number````````")
+    // console.log("query is a number````````")
 
     const searchParam = req.query.mobile_number.replace(/[^A-Z0-9]/ig, "").toString();
-    console.log(searchParam);
+    // console.log(searchParam);
 
     const data = await service.list();
 
@@ -26,7 +26,7 @@ async function list(req, res) {
     res.json({ data: resFromSearch })
 
   } else {
-    console.log("------------Req query:", req.query)
+    // console.log("------------Req query:", req.query)
   
   
   let dateFromQuery = req.query;
@@ -96,9 +96,9 @@ function dateIsValid(dateStr) {
 
 // validates input time follows HH-MM format
 function validateHhMm(inputField) {
-  console.log({inputField}, "----------");
+  // console.log({inputField}, "----------");
   var isValid = /^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/.test(inputField);
-  console.log({isValid}, "---------------");
+  // console.log({isValid}, "---------------");
   return isValid;
 };
 
@@ -209,17 +209,17 @@ async function read(req, res, next) {
 };
 
 async function update(req, res) {
-  console.log("````````````reservation before updated info:", res.locals.reservation)
-  console.log(req.body.data);
+  // console.log("````````````reservation before updated info:", res.locals.reservation)
+  // console.log(req.body.data);
   const updatedReservation = {
     ...req.body.data,
     // ...res.locals.reservation,
     reservation_id: res.locals.reservation.reservation_id,
   };
 
-  console.log("```````````Res with updates:", updatedReservation);
+  // console.log("```````````Res with updates:", updatedReservation);
   const data = await service.update(updatedReservation);
-  console.log("``````````Data:", data)
+  // console.log("``````````Data:", data)
 
   
   // console.log("New data:", data)
@@ -228,7 +228,7 @@ async function update(req, res) {
 
 // function to update a reservations status from "booked" to "seated"
 async function updateStatus(req, res, next) {
-  console.log(req.body.data, "-------------")
+  // console.log(req.body.data, "-------------")
   const resToUpdate = res.locals.reservation;
   // console.log("reservation to edit:", resWithUpdatedStatus)
   // console.log("req.body:", req.body.data.status);
@@ -243,12 +243,12 @@ async function updateStatus(req, res, next) {
   };
   
   resToUpdate.status = req.body.data.status;
-  console.log(resToUpdate, "res to update -------------");
+  // console.log(resToUpdate, "res to update -------------");
 
   // console.log("newResWithUpdatedStatus", resWithUpdatedStatus)
 
   const data = await service.updateStatus(resToUpdate);
-  console.log("updateStatus, updated seated reservation", data)
+  // console.log("updateStatus, updated seated reservation", data)
   res.status(200).json({ data: data });
 };
 
