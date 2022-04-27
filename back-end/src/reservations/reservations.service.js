@@ -23,13 +23,15 @@ function updateStatus(resWithUpdatedStatus) {
     .select("*")
     .where({ reservation_id: resWithUpdatedStatus.reservation_id})
     .update(resWithUpdatedStatus, "*")
+    .then(([res]) => res );
 };
 
-function editReservation(newRes) {
+function update(updatedReservation) {
     return knex("reservations")
     .select("*")
-    .where({ reservation_id: newRes.reservation_id})
-    .update(newRes, "*")
+    .where({ reservation_id: updatedReservation.reservation_id})
+    .update(updatedReservation, "*")
+    .then(([res]) => res );
 };
 
 module.exports = {
@@ -37,5 +39,5 @@ module.exports = {
     create,
     read,
     updateStatus,
-    editReservation
+    update
 };

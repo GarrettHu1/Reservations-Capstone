@@ -82,7 +82,7 @@ async function handleSeat(table) {
     const ac = new AbortController();
     console.log(reservation_id)
     const data = {reservation_id: reservation_id, status: "seated"}
-    updateReservationStatus(data, ac.signal);
+    // updateReservationStatus(data, ac.signal);
     updateTable(values, ac.signal);
     history.push("/dashboard");
     window.location.reload();

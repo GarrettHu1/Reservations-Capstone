@@ -93,8 +93,6 @@ function Dashboard({ date }) {
     const ac = new AbortController();
     deleteRes(tableId, ac.signal);
     console.log("handleFinish:", resId)
-    const data = { reservation_id: resId, status: "finished"}
-    updateReservationStatus(data, ac.signal);
     window.location.reload();
     };
   };

@@ -84,7 +84,10 @@ async function update(req, res, next) {
     const data = await reservationsService.read(reservation_id);
     if (!data) {
         return next({ status: 404, message: `reservation not found, received: ${reservation_id}`})
-    }
+    };
+    if (data.status === "seated") {
+        return next({ status: 400, message: `reservation is already seated`})
+    };
     console.log({values}, "------------")
     const tableFromId = await service.read(tableId);
 
@@ -103,8 +106,15 @@ async function update(req, res, next) {
     }
     // console.log(updatedTable);
 
+    const updated = {
+        reservation_id,
+        status: "seated"
+    };
+
+    await reservationsService.updateStatus(updated);
+
     const newTable = await service.update(updatedTable);
-    // console.log("Updated table:", data);
+    console.log("Updated table:", data);
 
     res.status(200).json({ data: newTable });
 };
@@ -121,10 +131,18 @@ async function destroy(req, res, next) {
         return next({ status: 400, message: `table_id ${tableId} is not occupied`}); 
     };
 
+    const updated = {
+        reservation_id: tableFromId.reservation_id,
+        status: "finished"
+    };
+
+    await reservationsService.updateStatus(updated);
+
     const updatedTable = {
         ...tableFromId,
         reservation_id: null
     }
+
     await service.delete(updatedTable);
     res.status(200).json({ data: updatedTable });
 }

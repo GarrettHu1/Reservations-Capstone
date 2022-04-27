@@ -206,7 +206,25 @@ async function read(req, res, next) {
   const data = res.locals.reservation;
 
   res.status(200).json({ data: data })
-}
+};
+
+async function update(req, res) {
+  console.log("````````````reservation before updated info:", res.locals.reservation)
+  console.log(req.body.data);
+  const updatedReservation = {
+    ...req.body.data,
+    // ...res.locals.reservation,
+    reservation_id: res.locals.reservation.reservation_id,
+  };
+
+  console.log("```````````Res with updates:", updatedReservation);
+  const data = await service.update(updatedReservation);
+  console.log("``````````Data:", data)
+
+  
+  // console.log("New data:", data)
+  res.json({ data: data });
+};
 
 // function to update a reservations status from "booked" to "seated"
 async function updateStatus(req, res, next) {
@@ -230,22 +248,22 @@ async function updateStatus(req, res, next) {
   // console.log("newResWithUpdatedStatus", resWithUpdatedStatus)
 
   const data = await service.updateStatus(resToUpdate);
-  // console.log("updateStatus, updated seated reservation", data)
+  console.log("updateStatus, updated seated reservation", data)
   res.status(200).json({ data: data });
 };
 
-async function editReservation(req, res, next) {
-  const currentReservation = res.locals.reservation;
-  const newRes = {
-    ...req.body.data,
-    reservation_id: currentReservation.reservation_id
-  };
+// async function editReservation(req, res, next) {
+//   const currentReservation = res.locals.reservation;
+//   const newRes = {
+//     ...req.body.data,
+//     reservation_id: currentReservation.reservation_id
+//   };
 
-  console.log("New reservation data:", newRes)
-  const data = await service.editReservation(newRes);
+//   console.log("New reservation data:", newRes)
+//   const data = await service.editReservation(newRes);
 
-  res.status(201).json({ data: data.status })
-};
+//   res.status(201).json({ data: data.status })
+// };
 
 async function searchNum(req, res, next) {
   const searchParam = req.query;
@@ -261,8 +279,9 @@ module.exports = {
   listAll,
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
   read: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read) ],
+  update: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(update) ],
   updateStatus: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus) ],
-  editReservation: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(editReservation) ],
+  // editReservation: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(editReservation) ],
   reservationExists,
   searchNum: [ asyncErrorBoundary(listAll), asyncErrorBoundary(searchNum) ]
 };

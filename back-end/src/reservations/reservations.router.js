@@ -22,11 +22,12 @@ router
 router
   .route("/:reservationId")
   .get(controller.read)
+  .put(controller.update)
   .all(methodNotAllowed);
 
-  router
-  .route("/:reservationId/edit")
-  .put(controller.editReservation)
-  .all(methodNotAllowed);
+  // router
+  // .route("/:reservationId/edit")
+  // .put(controller.editReservation)
+  // .all(methodNotAllowed);
   
 module.exports = router;
