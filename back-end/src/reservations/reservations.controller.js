@@ -14,8 +14,22 @@ function asDateString(date) {
  * List handler for reservation resources
  */
 async function list(req, res) {
-  let dateFromQuery = req.query;
+  if (req.query.mobile_number) {
+    console.log("query is a number````````")
 
+    const searchParam = req.query.mobile_number.replace(/[^A-Z0-9]/ig, "").toString();
+    console.log(searchParam);
+
+    const data = await service.list();
+
+    const resFromSearch = data.filter((res) => res.mobile_number.replace(/[^A-Z0-9]/ig, "").includes(searchParam));
+    res.json({ data: resFromSearch })
+
+  } else {
+    console.log("------------Req query:", req.query)
+  
+  
+  let dateFromQuery = req.query;
   // if req.query === "mobile_number"
 
 
@@ -49,10 +63,15 @@ async function list(req, res) {
   const sortedReservations = resForCurrentDate.sort((a, b) => a.reservation_time.replace(/\D/g, '') - b.reservation_time.replace(/\D/g, '') )
   const filteredSortedReservations = sortedReservations.filter((reservation) => reservation.status !== "finished")
   res.json({data: filteredSortedReservations});
+  } // else statement end
+
 };
 
 async function listAll(req, res) {
+  // get all reservations
   const data = await service.list();
+  // set locals var to all reservations
+  res.locals.allReservations = data;
   res.json({data: data})
 };
 
@@ -228,6 +247,15 @@ async function editReservation(req, res, next) {
   res.status(201).json({ data: data.status })
 };
 
+async function searchNum(req, res, next) {
+  const searchParam = req.query;
+  const allReservations = res.locals.allReservations;
+  const data = allReservations.filter((reservation)=> {
+    reservation.mobile_number.replace(/[^A-Z0-9]/ig, "").includes(searchParam.replace(/[^A-Z0-9]/ig, ""))
+  })
+  res.json({ data: data })
+}
+
 module.exports = {
   list,
   listAll,
@@ -235,5 +263,6 @@ module.exports = {
   read: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read) ],
   updateStatus: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus) ],
   editReservation: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(editReservation) ],
-  reservationExists
+  reservationExists,
+  searchNum: [ asyncErrorBoundary(listAll), asyncErrorBoundary(searchNum) ]
 };

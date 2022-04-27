@@ -30,43 +30,45 @@ export default function Search() {
         });
       };  
 
-      function phonenumber(inputtxt) {
-        const format = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-        if(inputtxt.match(format)) {
-          return true;
-        } else {
-            return false;
-          }
-      };      
+      // Phone number input format validation, follows ###-###-####
+      // function phonenumber(inputtxt) {
+      //   const format = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+      //   if(inputtxt.match(format)) {
+      //     return true;
+      //   } else {
+      //       return false;
+      //     }
+      // };      
+
+      function findResFromNumber(reservations, searchNum) {
+        // const phoneNumb = new Array(data);
+        return reservations.filter(x => x.mobile_number.replace(/[^A-Z0-9]/ig, "").includes(searchNum));
+      };  
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        console.log("number:", formData);
+
         // takes in phone number, validates input,
         setShowRes(false);
+
         // removes spaces, characters, letters
         const formattedNum = formData.mobile_number.replace(/[^A-Z0-9]/ig, "");
         console.log("Formatted number:", formattedNum)
+
         // prints true / false if formatted mobile number is a valid number or not
-        console.log("Format function:", phonenumber(formattedNum));
+        // console.log("Format function:", phonenumber(formattedNum));
 
-        if (formattedNum.length > 0) {
+        if (formattedNum) {
             console.log("Mobile Number Is Valid");
-            const foundReservation = reservations.filter((reservation) => {
-              console.log(reservation.mobile_number.replace(/[^A-Z0-9]/ig, ""))
-              console.log(formattedNum)
-              const arrayFromNumber = Array.from(reservation.mobile_number.replace(/[^A-Z0-9]/ig, ""));
-              console.log(arrayFromNumber)
-              if (arrayFromNumber.includes(formattedNum)) {
-                   return reservation
-              }
-              return Number(reservation.mobile_number.replace(/[^A-Z0-9]/ig, "")) === Number(formattedNum)
-            });
+            const reservationsFromSearch = await findResFromNumber(reservations, formData.mobile_number);
 
-            console.log("foundReservation", foundReservation);
-            setFoundRes(foundReservation);
+            console.log("reservationsFromSearch", reservationsFromSearch);
+            setFoundRes(reservationsFromSearch);
         } else {
             setShowRes(true);
-            window.alert('Number Is Invalid')
+            window.alert('Number Is Invalid');
         };
 
 
@@ -88,7 +90,7 @@ return (
         <form>
         <label>
             Mobile Number:
-            <input type="text" name="mobile_number" onChange={handleChange} placeholder={"Enter the customer's mobile number"} />
+            <input type="text" pattern="[0-9]*" name="mobile_number" onChange={handleChange} placeholder={"Enter the customer's mobile number"} />
         </label>
         <button type="submit" onClick={handleSubmit} className="btn btn-primary">Find</button>
         </form>

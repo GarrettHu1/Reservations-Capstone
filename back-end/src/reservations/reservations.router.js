@@ -15,11 +15,6 @@ router
   .all(methodNotAllowed);
 
 router
-.route("/all")
-.get(controller.listAll)
-.all(methodNotAllowed);
-
-router
   .route("/:reservationId/status")
   .put(controller.updateStatus)
   .all(methodNotAllowed);
