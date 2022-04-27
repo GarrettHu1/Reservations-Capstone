@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { listReservations, listTables, deleteRes, updateReservationStatus } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { previous, today, next } from "../utils/date-time"
+import { previous, today, next, formatAsDate } from "../utils/date-time"
 
 /**
  * Defines the dashboard page.
@@ -11,11 +11,14 @@ import { previous, today, next } from "../utils/date-time"
  * @returns {JSX.Element}
  */
 function Dashboard({ date }) {
+  
   const [ reservations, setReservations ] = useState([]);
   const [ reservationsError, setReservationsError ] = useState(null);
   const [ tables, setTables ] = useState([]);
   const [ tablesError, setTablesError ] = useState(null);
   const [ currentDay, setCurrentDay ] = useState(today());
+
+  const location = useLocation();
 
   const history = useHistory();
 
@@ -27,6 +30,11 @@ function Dashboard({ date }) {
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
+    if (location.search) {
+      const dateFromQuery = formatAsDate(location.search)
+      console.log("dateFromQuery:", dateFromQuery)
+      console.log("currentDay:", currentDay)
+    }
     listReservations(currentDay, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
