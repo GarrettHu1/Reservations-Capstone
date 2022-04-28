@@ -30,7 +30,7 @@ const [ formData, setFormData ] = useState({ ...initialFormState });
   useEffect(loadDashboard, []);
 
   function loadDashboard() {
-    const abortController = new AbortController();
+    const ac = new AbortController();
     setReservationsError(null);
     // listReservations(today(), abortController.signal)
     //   .then((reservations)=> {
@@ -38,7 +38,7 @@ const [ formData, setFormData ] = useState({ ...initialFormState });
     //       setReservation(foundRes)
     //       setFormData(foundRes)
     //   })
-    readReservation(resId)
+    readReservation(resId, ac.signal)
     .then((reservation) => {
         setFormData(initialFormState);
         setReservation(reservation);

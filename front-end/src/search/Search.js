@@ -14,9 +14,9 @@ export default function Search() {
     const [ foundRes, setFoundRes ] = useState([]);
 
     useEffect(()=> {
-        const abortController = new AbortController();
+        const ac = new AbortController();
         setReservationsErrors(null);
-        listAllReservations(abortController.signal)
+        listAllReservations(ac.signal)
         .then(setReservations)
         .catch(setReservationsErrors)
       }, []);

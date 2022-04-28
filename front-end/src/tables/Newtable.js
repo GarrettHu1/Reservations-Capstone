@@ -45,8 +45,8 @@ export default function NewTable() {
         event.preventDefault();
         event.stopPropagation();
         setErrors(null);
-
-        createTable(table)
+        const ac = new AbortController();
+        createTable(table, ac.signal)
             .then(() => {
                 history.push(`/dashboard?date=${today()}`);
             })
