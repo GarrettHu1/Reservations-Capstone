@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api"
+import ResForm from "./ResForm";
 
 export default function NewRes() {
 
@@ -14,19 +15,19 @@ const initialFormState = {
     status: "booked"
 };
 
-const [ formData, setFormData ] = useState({ ...initialFormState });
+const [ reservation, setreservation ] = useState({ ...initialFormState });
 const [ errors, setErrors ] = useState([]);
 const history = useHistory();
 
 const handleChange = ({ target }) => {
     if (target.type === "number") {
-        setFormData({
-            ...formData,
+        setreservation({
+            ...reservation,
             [target.name]: Number(target.value),
           });
     } else {
-    setFormData({
-      ...formData,
+    setreservation({
+      ...reservation,
       [target.name]: target.value,
     });}
   };  
@@ -38,12 +39,12 @@ const handleSubmit = async (event) => {
 
     const handleSubErrors = [];
 
-    let a = formData.first_name;
-    let b = formData.last_name;
-    let c = formData.mobile_number;
-    let d = formData.reservation_date;
-    let e = formData.reservation_time;
-    let f = formData.people;
+    let a = reservation.first_name;
+    let b = reservation.last_name;
+    let c = reservation.mobile_number;
+    let d = reservation.reservation_date;
+    let e = reservation.reservation_time;
+    let f = reservation.people;
 
     if ( a === "" || b === "" || c === "" || d === "" || f < 1 || e === ""){
         window.alert('Please fill in all values')
@@ -115,11 +116,11 @@ const handleSubmit = async (event) => {
 
         if (handleSubErrors.length === 0){
         const ac = new AbortController();
-        await createReservation(formData, ac.signal);
+        await createReservation(reservation, ac.signal);
         // returns user to dashboard
         history.push(`/dashboard?date=${d}`);
         // clears form 
-        // setFormData(initialFormState); 
+        // setreservation(initialFormState); 
     }
 
     }
@@ -127,47 +128,11 @@ const handleSubmit = async (event) => {
 
   const handleCancel = (event) => {
     event.preventDefault();
-    setFormData(initialFormState);
+    setreservation(initialFormState);
     history.goBack();
   };
 
     return (
-        <main>
-            <h1>Create Reservation</h1>
-            {errors.length > 0 &&
-            <div className="alert alert-danger" role="alert" >
-                Please fix the following errors:
-                {errors.map((error)=> <li>{error}</li>)}
-            </div>
-            }
-            <form>
-        <label>
-            First Name:
-            <input type="text" name="first_name" onChange={handleChange} placeholder={"First Name"} />
-        </label>
-        <label>
-            Last Name:
-            <input type="text" name="last_name" onChange={handleChange} placeholder={"Last Name"} />
-        </label>
-        <label>
-            Mobile Number:
-            <input type="text" name="mobile_number" onChange={handleChange} placeholder={"Mobile Number"} />
-        </label>
-        <label>
-            Date of reservation:
-            <input type="date" name="reservation_date" onChange={handleChange} />
-        </label>
-        <label>
-            Time of reservation:
-            <input type="time" name="reservation_time" onChange={handleChange} />
-        </label>
-        <label>
-            Number of people in the party:
-            <input type="number" name="people" onChange={handleChange} />
-        </label>
-        <button type="submit" onClick={handleSubmit} className="btn btn-primary">Submit</button>
-        <button onClick={handleCancel} className="btn btn-danger">Cancel</button>
-        </form>
-        </main> 
+        <ResForm handleCancel={handleCancel} handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} errors={errors} />
     )
 };
