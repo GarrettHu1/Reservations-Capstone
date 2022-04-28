@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { listReservations, editReservation } from "../utils/api";
+import { listReservations, editReservation, readReservation } from "../utils/api";
 import { today } from "../utils/date-time";
 import ResForm from "./ResForm";
 
@@ -8,7 +8,7 @@ export default function EditRes() {
 
 const [ errors, setErrors ] = useState([]);
 const history = useHistory();
-const resId  = useParams();
+const resId  = useParams().reservation_id;
 
 const [ reservation, setReservation ] = useState([]);
 const [ reservationsError, setReservationsError ] = useState(null);
@@ -29,15 +29,20 @@ const [ formData, setFormData ] = useState({ ...initialFormState });
   // load all reservations on initial page load, then finds single reservation to edit
   useEffect(loadDashboard, []);
 
-  async function loadDashboard() {
+  function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations(today(), abortController.signal)
-      .then((reservations)=> {
-          const foundRes = reservations.find((reservation) => reservation.reservation_id === Number(resId.reservation_id))
-          setReservation(foundRes)
-          setFormData(foundRes)
-      })
+    // listReservations(today(), abortController.signal)
+    //   .then((reservations)=> {
+    //       const foundRes = reservations.find((reservation) => reservation.reservation_id === Number(resId.reservation_id))
+    //       setReservation(foundRes)
+    //       setFormData(foundRes)
+    //   })
+    readReservation(resId)
+    .then((reservation) => {
+        setFormData(initialFormState);
+        setReservation(reservation);
+    })
       .catch(setReservationsError);
     return () => abortController.abort();
   };
@@ -82,6 +87,7 @@ const handleSubmit = async (event) => {
         console.log(formData)
     // res date values
     const resDate = new Date(d);
+    console.log(d);
     const resMonth = Number(d.slice(5, 7));
     const resDay = Number(d.slice(8, 10));
     const resYear = Number(d.slice(0, 4));
@@ -161,6 +167,7 @@ const handleSubmit = async (event) => {
 
 //   <ResForm handleCancel={handleCancel} handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} />
 
+  console.log(reservation)
 
     return (
         <main>
