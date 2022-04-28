@@ -97,10 +97,13 @@ function Dashboard({ date }) {
   //   }; 
   // };
 
-  function onCancel(reservation_id) {
-    updateReservationStatus(reservation_id)
+  function cancel(reservation_id) {
+    console.log("Cancelling")
+    if (window.confirm("Do you want to cancel this reservation? This cannot be undone.")) {
+      updateReservationStatus(reservation_id)
       .then(loadDashboard)
       .catch(setReservationsError)
+    }
   }
 
   function onFinish(table_id, reservation_id) {
@@ -178,17 +181,18 @@ function Dashboard({ date }) {
             <a href={`/reservations/${reservation.reservation_id}/seat`}><button className="btn btn-secondary">Seat</button></a>
             }
             </td>
-            <td><button className="btn btn-secondary" 
-            onClick={()=> {
-              history.push(`/reservations/${reservation.reservation_id}/edit`);
-            }}>
-            Edit
-            </button></td>
+            <td>
+            <a href={`/reservations/${reservation.reservation_id}/edit`}>
+                <button className="btn btn-secondary">Edit</button>
+            </a>
+            </td>
             <td>
               {/* <button className="btn btn-secondary" reservation-id-cancel={reservation.reservation_id} 
             onClick={() => handleCancel(reservation.reservation_id) }>Cancel</button> */}
-            <button className="btn btn-secondary" reservation-id-cancel={reservation.reservation_id} 
-            onCancel={onCancel}>Cancel</button>
+            <button className="btn btn-secondary" data-reservation-id-cancel={reservation.reservation_id} 
+            onClick={() => cancel(reservation.reservation_id)}>
+              Cancel
+            </button>
             </td>         
             </tr>
           )) : "No Reservations Found"}

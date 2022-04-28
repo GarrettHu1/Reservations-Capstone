@@ -132,7 +132,7 @@ const handleCancel = (event) => {
           ))}
           {/* <button onClick={handleCancel} className="btn btn-secondary">Cancel</button> */}
           <button type="submit" className="btn btn-primary">Submit</button>
-          <button type="button" onClick={() => history.goBack()}>Cancel</button>
+          <button type="button" className="btn btn-danger" onClick={() => history.goBack()}>Cancel</button>
         </div>
     )
 }
