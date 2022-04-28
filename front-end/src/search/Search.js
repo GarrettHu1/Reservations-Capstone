@@ -19,7 +19,7 @@ export default function Search() {
         listAllReservations(abortController.signal)
         .then(setReservations)
         .catch(setReservationsErrors)
-      }, []);    
+      }, []);
 
       if(reservationsErrors) console.log(reservationsErrors);
 
@@ -42,7 +42,9 @@ export default function Search() {
 
       function findResFromNumber(reservations, searchNum) {
         // const phoneNumb = new Array(data);
-        return reservations.filter(x => x.mobile_number.replace(/[^A-Z0-9]/ig, "").includes(searchNum));
+        const data = reservations.filter(x => x.mobile_number.replace(/[^A-Z0-9]/ig, "").includes(searchNum));
+        console.log("reservations includes number from search", data)
+        return data
       };  
 
     const handleSubmit = async (event) => {
@@ -55,17 +57,21 @@ export default function Search() {
 
         // removes spaces, characters, letters
         const formattedNum = formData.mobile_number.replace(/[^A-Z0-9]/ig, "");
-        console.log("Formatted number:", formattedNum)
+        console.log("Formatted number:", Number(formattedNum))
 
         // prints true / false if formatted mobile number is a valid number or not
         // console.log("Format function:", phonenumber(formattedNum));
 
         if (formattedNum) {
             console.log("Mobile Number Is Valid");
-            const reservationsFromSearch = await findResFromNumber(reservations, formData.mobile_number);
+            const reservationsFromSearch = await findResFromNumber(reservations, formattedNum);
 
             console.log("reservationsFromSearch", reservationsFromSearch);
-            setFoundRes(reservationsFromSearch);
+            if (reservationsFromSearch) {
+              setFoundRes(reservationsFromSearch);
+            } else {
+              setFoundRes(null);
+            }
         } else {
             setShowRes(true);
             window.alert('Number Is Invalid');
@@ -83,7 +89,6 @@ export default function Search() {
     <button type="button" class="btn btn-outline-primary">search</button>
     </div>
     */
-
 
 return (
     <div>
@@ -120,7 +125,7 @@ return (
             <td>{reservation.status}</td>   
             </tr>
           )) 
-          : foundRes ?
+          : foundRes.length > 0 ?
           foundRes.map((reservation, index) => (
             <tr key={index}>
             <td>{index}</td>

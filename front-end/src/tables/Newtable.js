@@ -29,23 +29,27 @@ const handleChange = ({ target }) => {
 
 const handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log(formData, "FormData-----------------")
     // reset errors
     setErrors([]);
     // temp error container
     let handleSubErrors = [];
     // table form values
-    let a = formData.table_name;
-    let b = Number(formData.capacity);
-    // error mesage
+    const a = formData.table_name;
+    const b = Number(formData.capacity);
+    console.log("Table_name-------------", a)
+
+    // error types
     const capacityError = "Table must have at least person";
-    const capacityIsNanError = "Table capacity must be a number"
+    const capacityIsNanError = "Table capacity must be a number";
     const tableNameError = "Table name must be longer than 1 character";
 
     if ( a === "" || b === "" ){
         window.alert('Please fill in all values')
+        handleSubErrors.push(tableNameError);
+        console.log(handleSubErrors, "-----------Handle Sub Errors----------")
     } else {
-        if (a.length <= 1) {
+        if (a.length < 2) {
             handleSubErrors.push(tableNameError);
         }
         if (b < 1) {

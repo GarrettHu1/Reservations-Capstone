@@ -19,7 +19,6 @@ function Dashboard({ date }) {
   const [ currentDay, setCurrentDay ] = useState(today());
 
   const location = useLocation();
-
   const history = useHistory();
 
   console.log("today", currentDay)
@@ -108,6 +107,14 @@ function Dashboard({ date }) {
   // filters reservations to only return those with "booked" or "seated" status
   const filteredReservations = reservations.filter((reservation) => reservation.status === "booked" || reservation.status === "seated")
 
+  // Old button
+  // <button className="btn btn-secondary" 
+  // onClick={()=> {
+  //   history.push(`/reservations/${reservation.reservation_id}/seat`);
+  // }}>
+  // Seat
+  // </button>
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -122,8 +129,8 @@ function Dashboard({ date }) {
         Today
         </button>
         <button className="btn btn-secondary" onClick={goNext}>
-        Next&nbsp;<
-        span class="oi oi-chevron-right"></span>
+        <span class="oi oi-chevron-right"></span>&nbsp;
+        Next
         </button>
         </div>
       </div>
@@ -145,7 +152,7 @@ function Dashboard({ date }) {
         <tbody>
           {filteredReservations.length > 0 ? filteredReservations.map((reservation, index) => (
             <tr key={index}>
-            <td>{index}</td>
+            <td>{reservation.reservation_id}</td>
             <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
             <td>{reservation.mobile_number}</td>
             <td>{reservation.reservation_date}</td>
@@ -154,12 +161,8 @@ function Dashboard({ date }) {
             <td>{reservation.status}</td>
             <td>
             {reservation.status === "booked" && 
-            <button className="btn btn-secondary" 
-            onClick={()=> {
-              history.push(`/reservations/${reservation.reservation_id}/seat`);
-            }}>
-            Seat
-            </button>}
+            <a href={`/reservations/${reservation.reservation_id}/seat`}><button className="btn btn-secondary">Seat</button></a>
+            }
             </td>
             <td><button className="btn btn-secondary" 
             onClick={()=> {
@@ -167,8 +170,10 @@ function Dashboard({ date }) {
             }}>
             Edit
             </button></td>
-            <td><button className="btn btn-secondary" reservation-id-cancel={reservation.reservation_id} 
-            onClick={() => handleCancel(reservation.reservation_id) }>Cancel</button></td>            
+            <td>
+              <button className="btn btn-secondary" reservation-id-cancel={reservation.reservation_id} 
+            onClick={() => handleCancel(reservation.reservation_id) }>Cancel</button>
+            </td>         
             </tr>
           )) : "No Reservations Found"}
         </tbody>
@@ -189,7 +194,7 @@ function Dashboard({ date }) {
             <td>{index}</td>
             <td>{`${table.table_name}`}</td>
             <td>{table.capacity}</td>
-            <td>{`${table.reservation_id ? "Occupied" : "Free"}`}</td>        
+            <td>{`${table.reservation_id ? "occupied" : "free"}`}</td>        
             <td>{ table.reservation_id && 
             <button className="btn btn-secondary" onClick={() => handleFinish(table.table_id, table.reservation_id) }>Finish</button> }
             </td>
