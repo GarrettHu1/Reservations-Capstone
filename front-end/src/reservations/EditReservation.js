@@ -155,7 +155,6 @@ const handleSubmit = async (event) => {
         // returns user to dashboard
         history.push(`/dashboard?date=${d}`);
     }
-
     }
 };
 
@@ -170,42 +169,6 @@ const handleSubmit = async (event) => {
   console.log(reservation)
 
     return (
-        <main>
-            <h1>Edit Reservation</h1>
-            {errors.length > 0 &&
-            <div className="alert alert-danger" role="alert" >
-                Please fix the following errors:
-                {errors.map((error)=> <li>{error}</li>)}
-            </div>
-            }
-        <form>
-        <label>
-            First Name:
-            <input type="text" name="first_name" onChange={handleChange} defaultValue={reservation.first_name} />
-        </label>
-        <label>
-            Last Name:
-            <input type="text" name="last_name" onChange={handleChange} defaultValue={reservation.last_name} />
-        </label>
-        <label>
-            Mobile Number:
-            <input type="text" name="mobile_number" onChange={handleChange} defaultValue={reservation.mobile_number} />
-        </label>
-        <label>
-            Date of reservation:
-            <input type="date" name="reservation_date" onChange={handleChange} defaultValue={reservation.reservation_date} />
-        </label>
-        <label>
-            Time of reservation:
-            <input type="time" name="reservation_time" onChange={handleChange} defaultValue={reservation.reservation_time} />
-        </label>
-        <label>
-            Number of people in the party:
-            <input type="number" name="people" onChange={handleChange} defaultValue={reservation.people} />
-        </label>
-        <button type="submit" onClick={handleSubmit} className="btn btn-primary">Submit</button>
-        <button onClick={handleCancel} className="btn btn-danger">Cancel</button>
-        </form>
-        </main> 
+        <ResForm handleCancel={handleCancel} handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} errors={errors} /> 
     )
 };
