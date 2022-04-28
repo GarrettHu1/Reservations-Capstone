@@ -180,14 +180,34 @@ export async function deleteRes(table_id, signal) {
   }
 };
 
+// onFinish table => 
+export async function finishTable(table_id, reservation_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+  };
+  return await fetchJson(url, options, {});
+}
+
 // functino to update status of reservation being seated from "booked" to "seated"
-export async function updateReservationStatus(data, signal) {
-    const { reservation_id } = data;
-    const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+export async function updateReservationStatus(
+    // data,
+    reservationId, 
+    signal
+  ) {
+    // const { reservation_id } = data;
+    // const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+    const url = `${API_BASE_URL}/reservations/${reservationId}/status`;
     const options = {
       method: "PUT",
       headers,
-      body: JSON.stringify({data: data}),
+      body: JSON.stringify({
+        // data: data
+        data: {
+          status: "cancelled"
+        }
+      }),
       signal
     };
     try {
@@ -198,6 +218,31 @@ export async function updateReservationStatus(data, signal) {
       throw err;
     }
 };
+
+export async function updateReservation(reservation, signal) {
+  const { reservation_date, reservation_time, reservation_id } = reservation;
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+
+  const data = {
+    ...reservation,
+    reservation_date: Array.isArray(reservation_date)
+      ? reservation_date[0]
+      : reservation_date,
+    reservation_time: Array.isArray(reservation_time)
+      ? reservation_time[0]
+      : reservation_time,
+  };
+
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data }),
+    signal,
+  };
+  const response = await fetchJson(url, options, reservation);
+
+  return Array.isArray(response) ? response[0] : response;
+}
 
 export async function editReservation(reservation, signal) {
   const url = `${API_BASE_URL}/reservations/${reservation.reservation_id}`;
@@ -215,4 +260,16 @@ export async function editReservation(reservation, signal) {
     throw err;
   }
 };
+
+export async function seatReservation(reservation_id, table_id) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "PUT",
+    body: JSON.stringify({ data: { reservation_id } }),
+    headers,
+  };
+  return await fetchJson(url, options, {});
+};
+
+
 

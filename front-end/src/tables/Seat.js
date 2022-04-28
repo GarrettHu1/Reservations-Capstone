@@ -3,7 +3,7 @@ import {
     useParams,
     useHistory
   } from "react-router-dom";
-import { listTables, updateTable, listReservations } from "../utils/api";
+import { listTables, updateTable, listReservations, readReservation } from "../utils/api";
 import { today } from "../utils/date-time";
 
 
@@ -36,6 +36,12 @@ export default function Seat() {
 
       return () => abortController.abort();
     };
+
+    useEffect(() => {
+      readReservation(reservation_id)
+        .then(setReservations)
+    }, [reservation_id]);
+
   if (tablesError) console.log(tablesError);
   if (resError) console.log(resError);
 
@@ -103,16 +109,20 @@ const handleCancel = (event) => {
         <div>
             Seat Reservation:
             {resToBeSeated &&
-            <h3>{`# ${resToBeSeated.reservation_id} - 
-            ${resToBeSeated.first_name} ${resToBeSeated.last_name} on 
-            ${resToBeSeated.reservation_date} at 
-            ${resToBeSeated.reservation_time} for 
-            ${resToBeSeated.people}`}</h3>}
-            {seatErrors.length > 0 &&
-            <div className="alert alert-danger" role="alert" >
-                Please fix the following errors:
-                {seatErrors.map((error)=> <li>{error}</li>)}
-            </div>
+              <h3>
+                {`# ${resToBeSeated.reservation_id} - 
+                ${resToBeSeated.first_name} ${resToBeSeated.last_name} on 
+                ${resToBeSeated.reservation_date} at 
+                ${resToBeSeated.reservation_time} for 
+                ${resToBeSeated.people}`}
+              </h3>
+            }
+            {
+              seatErrors.length > 0 &&
+                <div className="alert alert-danger" role="alert" >
+                  Please fix the following errors:
+                  {seatErrors.map((error)=> <li>{error}</li>)}
+                </div>
             }
             {tables.map((table, index) => (
             <div className="tabledivs">
@@ -120,7 +130,9 @@ const handleCancel = (event) => {
             <button type="submit" onClick={() => handleSeat(table)} className="btn btn-primary">Seat</button>  
             </div>              
           ))}
-          <button onClick={handleCancel} className="btn btn-secondary">Cancel</button>
+          {/* <button onClick={handleCancel} className="btn btn-secondary">Cancel</button> */}
+          <button type="submit" className="btn btn-primary">Submit</button>
+          <button type="button" onClick={() => history.goBack()}>Cancel</button>
         </div>
     )
 }

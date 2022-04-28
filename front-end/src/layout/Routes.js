@@ -4,9 +4,10 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
+import useQuery from "../utils/useQuery";
 import NewRes from "../reservations/NewRes";
 import NewTable from "../tables/Newtable";
-import Seat from "../tables/Seat"
+import ReservationSeat from "../tables/ReservationSeat"
 import Search from "../search/Search";
 import Editreservation from "../reservations/EditReservation";
 
@@ -18,6 +19,7 @@ import Editreservation from "../reservations/EditReservation";
  * @returns {JSX.Element}
  */
 function Routes() {
+  const query = useQuery();
   return (
     <Switch>
       <Route exact={true} path="/">
@@ -30,13 +32,13 @@ function Routes() {
         <NewRes />
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={today()} />
+        <Dashboard date={query.get("date") || today()} />
       </Route>
       <Route exact={true} path="/tables/new">
         <NewTable />
       </Route>
       <Route path={`/reservations/:reservation_id/seat`}>
-        <Seat />
+        <ReservationSeat />
       </Route>
       <Route path={`/search`}>
         <Search />
