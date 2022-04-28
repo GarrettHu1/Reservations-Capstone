@@ -51,6 +51,7 @@ export default function NewTable() {
                 history.push(`/dashboard?date=${today()}`);
             })
             .catch(setErrors);
+        return ac.abort();
     }
 
 // const handleSubmit = async (event) => {

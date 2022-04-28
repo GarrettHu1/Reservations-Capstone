@@ -121,6 +121,7 @@ const handleSubmit = async (event) => {
         history.push(`/dashboard?date=${d}`);
         // clears form 
         // setreservation(initialFormState); 
+        return () => ac.abort();
     }
 
     }

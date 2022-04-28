@@ -44,7 +44,7 @@ const [ formData, setFormData ] = useState({ ...initialFormState });
         setReservation(reservation);
     })
       .catch(setReservationsError);
-    return () => abortController.abort();
+    return () => ac.abort();
   };
 
   if (reservationsError) console.log(reservationsError);
