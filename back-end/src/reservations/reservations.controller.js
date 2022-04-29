@@ -275,13 +275,13 @@ async function searchNum(req, res, next) {
 }
 
 module.exports = {
-  list,
-  listAll,
+  list: asyncErrorBoundary(list),
+  listAll: asyncErrorBoundary(listAll),
   create: [ asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
   read: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(read) ],
   update: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(hasReqProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(update) ],
   updateStatus: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(updateStatus) ],
   // editReservation: [ asyncErrorBoundary(reservationExists), asyncErrorBoundary(editReservation) ],
-  reservationExists,
+  reservationExists: asyncErrorBoundary(reservationExists),
   searchNum: [ asyncErrorBoundary(listAll), asyncErrorBoundary(searchNum) ]
 };
