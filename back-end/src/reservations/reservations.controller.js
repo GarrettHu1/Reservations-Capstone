@@ -79,7 +79,7 @@ async function listAll(req, res) {
 function dateIsValid(dateStr) {
   const regex = /^\d{4}-\d{2}-\d{2}$/;
 
-  if (dateStr.match(regex) === null) {
+  if (dateStr.slice(0, 10).match(regex) === null) {
     return false;
   }
 

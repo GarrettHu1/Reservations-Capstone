@@ -13,18 +13,18 @@ const resId  = useParams().reservation_id;
 const [ reservation, setReservation ] = useState([]);
 const [ reservationsError, setReservationsError ] = useState(null);
 
-const initialFormState = {
-    first_name: reservation.first_name,
-    last_name: reservation.last_name,
-    mobile_number: reservation.mobile_number,
-    reservation_date: reservation.reservation_date,
-    reservation_time: reservation.reservation_time,
-    people: reservation.people,
-    status: reservation.status
-};
+// const initialFormState = {
+//     first_name: reservation.first_name,
+//     last_name: reservation.last_name,
+//     mobile_number: reservation.mobile_number,
+//     reservation_date: reservation.reservation_date,
+//     reservation_time: reservation.reservation_time,
+//     people: reservation.people,
+//     status: reservation.status
+// };
 // console.log("initialFormState:", initialFormState)
 
-const [ formData, setFormData ] = useState({ ...initialFormState });
+const [ formData, setFormData ] = useState(null);
 
   // load all reservations on initial page load, then finds single reservation to edit
   useEffect(loadDashboard, []);
@@ -40,10 +40,12 @@ const [ formData, setFormData ] = useState({ ...initialFormState });
     //   })
     readReservation(resId, ac.signal)
     .then((reservation) => {
-        setFormData(initialFormState);
         setReservation(reservation);
+        setFormData(reservation)
     })
       .catch(setReservationsError);
+
+      
     return () => ac.abort();
   };
 
@@ -51,23 +53,32 @@ const [ formData, setFormData ] = useState({ ...initialFormState });
 //   console.log("Found reservation:", reservation)
 
 
+
+console.log("initial form data---------------", formData);
+console.log("reservation data`````", reservation);
+
+
 const handleChange = ({ target }) => {
-    if (target.type === "number") {
+    if (target.type === "date") {
         setFormData({
             ...formData,
-            [target.name]: Number(target.value),
+            [target.name]: target.value.replace(/[^A-Z0-9]/ig, "").slice(0, 8),
           });
-    } else {
+    } else if (target.type === "number") {
     setFormData({
       ...formData,
-      [target.name]: target.value,
-    });}
+      [target.name]: Number(target.value),
+    });} else {
+      setFormData({
+        ...formData,
+        [target.name]: target.value,
+      });}
 
   };  
 
 const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("formData", formData)
+    console.log("formData on submit ----", formData)
 
     setErrors([]);
 
@@ -76,7 +87,7 @@ const handleSubmit = async (event) => {
     let a = formData.first_name;
     let b = formData.last_name;
     let c = formData.mobile_number;
-    let d = formData.reservation_date;
+    let d = formData.reservation_date.replace(/[^A-Z0-9]/ig, "");
     let e = formData.reservation_time;
     let f = formData.people;
 
@@ -84,7 +95,7 @@ const handleSubmit = async (event) => {
         console.log(formData)
         window.alert('Please fill in all values')
     } else {
-        console.log(formData)
+        console.log("Form data passes validations````````", formData)
     // res date values
     const resDate = new Date(d);
     console.log(d);
@@ -153,7 +164,7 @@ const handleSubmit = async (event) => {
         const ac = new AbortController();
         await editReservation(formData, ac.signal);
         // returns user to dashboard
-        history.push(`/dashboard?date=${d}`);
+        history.push(`/dashboard`);
     }
     }
 };
@@ -161,14 +172,15 @@ const handleSubmit = async (event) => {
   const handleCancel = (event) => {
     event.preventDefault();
     // setFormData(initialFormState);
-    history.goBack();
+    history.go(-1);
   };
 
-//   <ResForm handleCancel={handleCancel} handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} />
-
-  console.log(reservation)
+  // console.log(reservation)
 
     return (
+      <div>
+        <h1>Edit Reservation</h1>
         <ResForm handleCancel={handleCancel} handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} errors={errors} /> 
+      </div>
     )
 };

@@ -134,6 +134,9 @@ const handleSubmit = async (event) => {
   };
 
     return (
+        <div>
+        <h1>Create Reservation</h1>
         <ResForm handleCancel={handleCancel} handleSubmit={handleSubmit} handleChange={handleChange} reservation={reservation} errors={errors} />
+        </div>
     )
 };
