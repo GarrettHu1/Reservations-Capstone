@@ -92,12 +92,12 @@ export default function Search() {
 
 return (
     <div>
-        <form>
-        <label>
+        <form onSubmit={handleSubmit}>
+        <label for="mobile_number">
             Mobile Number:
-            <input type="text" pattern="[0-9]*" name="mobile_number" onChange={handleChange} placeholder={"Enter the customer's mobile number"} />
+            <input type="text" data-mobile-number-id="mobile_number" name="mobile_number" onChange={handleChange} placeholder={"Enter the customer's mobile number"} />
         </label>
-        <button type="submit" onClick={handleSubmit} className="btn btn-primary">Find</button>
+        <button type="submit" className="btn btn-primary">Find</button>
         </form>
         
     <table>
