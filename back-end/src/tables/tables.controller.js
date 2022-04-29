@@ -148,9 +148,9 @@ async function destroy(req, res, next) {
 }
 
 module.exports = {
-    list,
+    list: asyncErrorBoundary(list),
     create: [ asyncErrorBoundary(hasReqTableProps), asyncErrorBoundary(hasOnlyValidProperties), asyncErrorBoundary(create) ],
     update: [ asyncErrorBoundary(update) ],
-    delete: [ destroy ]
+    delete: [ asyncErrorBoundary(destroy) ]
   };
   
