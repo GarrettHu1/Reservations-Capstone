@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listAllReservations } from "../utils/api"
+import { listAllReservations, listResWithoutDate } from "../utils/api"
 
 export default function Search() {
 
@@ -49,7 +49,7 @@ export default function Search() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        const ac = new AbortController();
         console.log("number:", formData);
 
         // takes in phone number, validates input,
@@ -64,9 +64,10 @@ export default function Search() {
 
         if (formattedNum) {
             console.log("Mobile Number Is Valid");
-            const reservationsFromSearch = await findResFromNumber(reservations, formattedNum);
+            // const reservationsFromSearch = await findResFromNumber(reservations, formattedNum);
+            const reservationsFromSearch = await listResWithoutDate(formattedNum, ac.signal);
 
-            console.log("reservationsFromSearch", reservationsFromSearch);
+            console.log("reservationsFromSearch---------", reservationsFromSearch);
             if (reservationsFromSearch) {
               setFoundRes(reservationsFromSearch);
             } else {
@@ -93,9 +94,9 @@ export default function Search() {
 return (
     <div>
         <form onSubmit={handleSubmit}>
-        <label for="mobile_number">
+        <label>
             Mobile Number:
-            <input type="text" data-mobile-number-id="mobile_number" name="mobile_number" onChange={handleChange} placeholder={"Enter the customer's mobile number"} />
+            <input type="text" name="mobile_number" onChange={handleChange} placeholder={"Enter the customer's mobile number"} />
         </label>
         <button type="submit" className="btn btn-primary">Find</button>
         </form>

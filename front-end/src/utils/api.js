@@ -69,6 +69,18 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+export async function listResWithoutDate(number, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${number}`);
+
+  const options = {
+    method: "GET",
+    headers,
+    signal
+  };
+
+  return await fetchJson(url, options)
+};
+
 // cancel in-flight api calls
 // const ac = new AbortController();
 

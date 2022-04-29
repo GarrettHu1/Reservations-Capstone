@@ -107,8 +107,10 @@ function Dashboard({ date }) {
   }
 
   function onFinish(table_id, reservation_id) {
+    if (window.confirm("Is this table ready to seat new guests?")) {
     finishTable(table_id, reservation_id)
       .then(loadDashboard)
+    }
   }
 
   // async function handleFinish(tableId, resId) {
@@ -181,7 +183,7 @@ function Dashboard({ date }) {
             <td>{reservation.reservation_date}</td>
             <td>{reservation.reservation_time}</td>
             <td>{reservation.people}</td>
-            <td>{reservation.status}</td>
+            <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
             <td>
             {reservation.status === "booked" && 
             <a href={`/reservations/${reservation.reservation_id}/seat`}><button className="btn btn-secondary">Seat</button></a>
@@ -220,12 +222,12 @@ function Dashboard({ date }) {
             <td>{index}</td>
             <td>{`${table.table_name}`}</td>
             <td>{table.capacity}</td>
-            <td>{`${table.reservation_id ? "occupied" : "free"}`}</td>        
+            <td data-table-id-status={table.table_id}>{`${table.reservation_id ? "occupied" : "free"}`}</td>        
             <td>{ table.reservation_id && 
             // <button className="btn btn-secondary" onClick={() => handleFinish(table.table_id, table.reservation_id) }>Finish</button> }
-            <button 
+            <button data-table-id-finish={table.table_id}
               className="btn btn-secondary" 
-              onFinish={onFinish}>
+              onClick={() => onFinish(table.table_id, table.reservation_id)}>
                 Finish
             </button> }
             

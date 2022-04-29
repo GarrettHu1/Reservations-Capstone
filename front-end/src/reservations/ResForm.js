@@ -36,8 +36,8 @@ export default function ResForm({ handleChange, handleSubmit, handleCancel, erro
         Number of people in the party:
         <input type="number" name="people" onChange={handleChange} value={reservation.people} />
     </label>
-    <button type="submit" onClick={handleSubmit} className="btn btn-primary">Submit</button>
-    <button onClick={handleCancel} className="btn btn-danger">Cancel</button>
+    <button type="submit" data-reservation-id-submit={reservation.reservation_id} onClick={handleSubmit} className="btn btn-primary">Submit</button>
+    <button data-reservation-id-cancel={reservation.reservation_id} onClick={handleCancel} className="btn btn-danger">Cancel</button>
     </form>
     </main> 
 )  
