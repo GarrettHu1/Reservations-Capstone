@@ -176,7 +176,7 @@ function Dashboard({ date }) {
         </thead>
         <tbody>
           {filteredReservations.length > 0 ? filteredReservations.map((reservation, index) => (
-            <tr key={index}>
+            <tr key={reservation.reservation_id}>
             <td>{reservation.reservation_id}</td>
             <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
             <td>{reservation.mobile_number}</td>
@@ -218,8 +218,8 @@ function Dashboard({ date }) {
         </thead>
         <tbody>
           {tables.map((table, index) => (
-            <tr key={index}>
-            <td>{index}</td>
+            <tr key={table.table_id}>
+            <td>{table.table_id}</td>
             <td>{`${table.table_name}`}</td>
             <td>{table.capacity}</td>
             <td data-table-id-status={table.table_id}>{`${table.reservation_id ? "occupied" : "free"}`}</td>        

@@ -115,9 +115,9 @@ return (
         </thead>
         <tbody>
           {showRes ? 
-          reservations.map((reservation, index) => (
-            <tr key={index}>
-            <td>{index}</td>
+          reservations.map((reservation) => (
+            <tr key={reservation.reservation_id}>
+            <td>{reservation.reservation_id}</td>
             <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
             <td>{reservation.mobile_number}</td>
             <td>{reservation.reservation_date}</td>
@@ -127,9 +127,9 @@ return (
             </tr>
           )) 
           : foundRes.length > 0 ?
-          foundRes.map((reservation, index) => (
-            <tr key={index}>
-            <td>{index}</td>
+          foundRes.map((reservation) => (
+            <tr key={reservation.reservation_id}>
+            <td>{reservation.reservation_id}</td>
             <td>{`${reservation.first_name}, ${reservation.last_name}`}</td>
             <td>{reservation.mobile_number}</td>
             <td>{reservation.reservation_date}</td>
