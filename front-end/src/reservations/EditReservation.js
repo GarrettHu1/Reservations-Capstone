@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { listReservations, editReservation, readReservation } from "../utils/api";
-import { today } from "../utils/date-time";
+import { today, formatAsDate } from "../utils/date-time";
 import ResForm from "./ResForm";
 
 export default function EditRes() {
@@ -40,8 +40,9 @@ const [ formData, setFormData ] = useState(null);
     //   })
     readReservation(resId, ac.signal)
     .then((reservation) => {
-        setReservation(reservation);
-        setFormData(reservation)
+      const newRes = {...reservation, reservation_date: formatAsDate(reservation.reservation_date)}
+        setReservation(newRes);
+        setFormData(newRes)
     })
       .catch(setReservationsError);
 
@@ -164,7 +165,7 @@ const handleSubmit = async (event) => {
         const ac = new AbortController();
         await editReservation(formData, ac.signal);
         // returns user to dashboard
-        history.push(`/dashboard`);
+        history.push(`/dashboard?date=${formData.reservation_date}`);
     }
     }
 };

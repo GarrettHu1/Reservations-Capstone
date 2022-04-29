@@ -154,7 +154,7 @@ function Dashboard({ date }) {
         <button className="btn btn-secondary" onClick={goNext}>
         Next 
         &nbsp;
-        <span class="oi oi-chevron-right"></span>
+        <span className="oi oi-chevron-right"></span>
         </button>
 
         </div>
@@ -203,7 +203,7 @@ function Dashboard({ date }) {
             </button>
             </td>         
             </tr>
-          )) : "No Reservations Found"}
+          )) : <tr><td>No Reservations Found</td></tr>}
         </tbody>
       </table>
       
